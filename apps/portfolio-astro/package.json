@@ -1,0 +1,21 @@
+{
+  "name": "portfolio-astro",
+  "version": "0.0.1",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "format": "prettier --write \"**/*.{ts,tsx,astro}\"",
+    "typecheck": "astro check"
+  },
+  "dependencies": {
+    "astro": "^6.4.4"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9",
+    "typescript": "~6"
+  }
+}
