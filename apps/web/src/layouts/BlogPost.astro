@@ -1,0 +1,99 @@
+---
+import type { MarkdownHeading } from "astro"
+import BaseLayout from "@/layouts/BaseLayout.astro"
+import TableOfContents from "@/components/TableOfContents.astro"
+import RelatedPosts from "@/components/RelatedPosts.astro"
+import TagBadge from "@/components/TagBadge.astro"
+import { Comments } from "@/components/Comments"
+import {
+  formatDate,
+  readingTimeOf,
+  type BlogPost as BlogPostEntry,
+} from "@/lib/content"
+import { giscusConfigured } from "@/config/site"
+
+interface Props {
+  post: BlogPostEntry
+  headings: MarkdownHeading[]
+  related: BlogPostEntry[]
+}
+const { post, headings, related } = Astro.props
+const { title, description, date, tags, categories, series, comments } =
+  post.data
+const showComments = comments && giscusConfigured
+---
+
+<BaseLayout title={title} description={description} article width="wide">
+  <div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_220px]">
+    <article class="min-w-0">
+      <header class="mb-8 border-b border-border pb-6">
+        <div
+          class="mb-3 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted-foreground"
+        >
+          <time datetime={date.toISOString()}>{formatDate(date)}</time>
+          <span aria-hidden="true">·</span>
+          <span>{readingTimeOf(post)}</span>
+          {
+            series && (
+              <>
+                <span aria-hidden="true">·</span>
+                <a
+                  href={`/blog/series/${series.toLowerCase()}`}
+                  class="font-mono hover:text-foreground"
+                >
+                  {series} series
+                </a>
+              </>
+            )
+          }
+          {
+            categories.map((category) => (
+              <a
+                href={`/blog/categories/${category}`}
+                class="font-mono uppercase tracking-wide hover:text-foreground"
+              >
+                {category}
+              </a>
+            ))
+          }
+        </div>
+        <h1 class="font-heading text-3xl font-bold tracking-tight text-balance">
+          {title}
+        </h1>
+        <p class="mt-2 text-muted-foreground">{description}</p>
+        {
+          tags.length > 0 && (
+            <div class="mt-4 flex flex-wrap gap-1.5">
+              {tags.map((tag) => (
+                <TagBadge tag={tag} />
+              ))}
+            </div>
+          )
+        }
+      </header>
+
+      <div
+        class="prose prose-neutral max-w-none dark:prose-invert prose-headings:font-heading prose-headings:scroll-mt-20 prose-a:text-foreground prose-pre:p-0"
+      >
+        <slot />
+      </div>
+
+      <RelatedPosts posts={related} />
+
+      {
+        showComments && (
+          <section class="mt-12 border-t border-border pt-8">
+            <h2 class="mb-4 font-heading text-lg font-semibold">Comments</h2>
+            <Comments client:visible />
+          </section>
+        )
+      }
+    </article>
+
+    <aside class="hidden lg:block">
+      <div class="sticky top-20">
+        <TableOfContents headings={headings} />
+      </div>
+    </aside>
+  </div>
+</BaseLayout>

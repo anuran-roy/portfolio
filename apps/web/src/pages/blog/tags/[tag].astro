@@ -1,0 +1,41 @@
+---
+import type { GetStaticPaths } from "astro"
+import BaseLayout from "@/layouts/BaseLayout.astro"
+import PostCard from "@/components/PostCard.astro"
+import { getBlogPosts, collectTags, slugify, type BlogPost } from "@/lib/content"
+
+export const getStaticPaths = (async () => {
+  const posts = await getBlogPosts()
+  return collectTags(posts).map(({ tag }) => ({
+    params: { tag: slugify(tag) },
+    props: {
+      tag,
+      posts: posts.filter((p) => p.data.tags.includes(tag)),
+    },
+  }))
+}) satisfies GetStaticPaths
+
+interface Props {
+  tag: string
+  posts: BlogPost[]
+}
+const { tag, posts } = Astro.props
+---
+
+<BaseLayout title={`Tag: ${tag}`}>
+  <header class="mb-8">
+    <p class="font-mono text-sm uppercase tracking-wide text-muted-foreground">
+      Tag
+    </p>
+    <h1 class="mt-1 font-heading text-3xl font-bold tracking-tight">#{tag}</h1>
+    <a
+      href="/blog/tags"
+      class="mt-2 inline-block text-sm text-muted-foreground hover:text-foreground"
+    >
+      ← All tags
+    </a>
+  </header>
+  <div class="grid gap-4 sm:grid-cols-2">
+    {posts.map((post) => <PostCard post={post} />)}
+  </div>
+</BaseLayout>

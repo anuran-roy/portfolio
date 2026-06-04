@@ -1,0 +1,22 @@
+---
+import type { GetStaticPaths } from "astro"
+import { render } from "astro:content"
+import BlogPost from "@/layouts/BlogPost.astro"
+import { getBlogPosts, relatedPosts } from "@/lib/content"
+
+export const getStaticPaths = (async () => {
+  const posts = await getBlogPosts()
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post, all: posts },
+  }))
+}) satisfies GetStaticPaths
+
+const { post, all } = Astro.props
+const { Content, headings } = await render(post)
+const related = relatedPosts(post, all)
+---
+
+<BlogPost post={post} headings={headings} related={related}>
+  <Content />
+</BlogPost>

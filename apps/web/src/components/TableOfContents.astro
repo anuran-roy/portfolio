@@ -1,0 +1,61 @@
+---
+import type { MarkdownHeading } from "astro"
+
+interface Props {
+  headings: MarkdownHeading[]
+}
+const { headings } = Astro.props
+// Only surface h2/h3 to keep the TOC scannable.
+const toc = headings.filter((h) => h.depth === 2 || h.depth === 3)
+---
+
+{
+  toc.length > 0 && (
+    <nav aria-label="Table of contents" class="text-sm">
+      <p class="mb-2 font-mono text-xs uppercase tracking-wide text-muted-foreground">
+        On this page
+      </p>
+      <ul class="space-y-1.5 border-l border-border">
+        {toc.map((heading) => (
+          <li>
+            <a
+              href={`#${heading.slug}`}
+              data-toc-link={heading.slug}
+              class:list={[
+                "-ml-px block border-l-2 border-transparent py-0.5 text-muted-foreground transition-colors hover:text-foreground",
+                heading.depth === 2 ? "pl-3" : "pl-6",
+              ]}
+            >
+              {heading.text}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )
+}
+
+<script>
+  // Scroll-spy: highlight the heading currently in view.
+  const links = Array.from(
+    document.querySelectorAll<HTMLAnchorElement>("[data-toc-link]")
+  )
+  const bySlug = new Map(links.map((l) => [l.dataset.tocLink, l]))
+  const active = "border-l-foreground text-foreground"
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue
+        links.forEach((l) => l.classList.remove(...active.split(" ")))
+        bySlug.get(entry.target.id)?.classList.add(...active.split(" "))
+      }
+    },
+    { rootMargin: "0px 0px -75% 0px" }
+  )
+
+  for (const slug of bySlug.keys()) {
+    const el = slug && document.getElementById(slug)
+    if (el) observer.observe(el)
+  }
+</script>

@@ -1,0 +1,39 @@
+---
+title: "Pymetrix: An Overview"
+description: "An architectural overview of Pymetrix — the Flow Graph, the Database, and the extensible Plugins system."
+date: 2021-11-20
+author: "Anuran Roy"
+tags: ["python", "analytics", "pymetrix", "foss"]
+categories: ["docs"]
+series: "Pymetrix"
+comments: true
+---
+
+Pymetrix is an open-source plug-'n'-play Python analytics library, with
+extensibility as a core design principle.
+
+## Organization
+
+The library comprises three main components:
+
+### 1. The Flow Graph (Backbone)
+
+Inspired by Google Analytics, Pymetrix employs graphs where each node represents
+functions or objects requiring metrics. This structure enables tracking execution
+sequences and user-experience metrics.
+
+### 2. The Database (Memo Keeper)
+
+Stores graph information, plugin operations, and any data needed for future
+reference.
+
+### 3. Plugins (Internal Systems)
+
+These measure and deliver the needed metrics. The architecture allows developers
+to inherit the plugins class and create custom implementations:
+
+> Inherit the plugins class, determine the parts you wanna track, and that's all
+> you need to do to set up Plugins.
+
+Flow classes are detailed in `flow.py`, with complete documentation available in
+the next section covering [Flow classes](/blog/pymetrix-flow) specifically.

@@ -1,0 +1,15 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro"
+import TagBadge from "@/components/TagBadge.astro"
+import { getBlogPosts, collectTags } from "@/lib/content"
+
+const posts = await getBlogPosts()
+const tags = collectTags(posts)
+---
+
+<BaseLayout title="Tags" width="narrow">
+  <h1 class="mb-6 font-heading text-3xl font-bold tracking-tight">Tags</h1>
+  <div class="flex flex-wrap gap-2">
+    {tags.map(({ tag, count }) => <TagBadge tag={tag} count={count} />)}
+  </div>
+</BaseLayout>

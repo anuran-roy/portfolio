@@ -1,0 +1,18 @@
+---
+import SocialLinks from "@/components/SocialLinks.astro"
+import { site } from "@/config/site"
+
+const year = new Date().getFullYear()
+---
+
+<footer class="border-t border-border">
+  <div
+    class="mx-auto flex max-w-5xl flex-col gap-4 px-4 py-8 sm:flex-row sm:items-center sm:justify-between sm:px-6"
+  >
+    <div class="text-sm text-muted-foreground">
+      <p>© {year} {site.author.name}</p>
+      <p class="font-mono text-xs">{site.tagline}</p>
+    </div>
+    <SocialLinks />
+  </div>
+</footer>

@@ -1,0 +1,48 @@
+---
+title: "Pymetrix: The Open Source Plug and Play Python Analytics Library"
+description: "An introduction to Pymetrix, a plug-and-play analytics library written in Python for monitoring application performance metrics."
+date: 2021-11-20
+author: "Anuran Roy"
+tags: ["python", "analytics", "pymetrix", "foss"]
+categories: ["docs"]
+series: "Pymetrix"
+comments: true
+---
+
+## What is Pymetrix?
+
+Pymetrix is a plug-and-play analytics library written in Python, designed for
+monitoring and measuring application performance metrics.
+
+## Usage overview
+
+The library integrates straightforwardly into existing projects. Users create a
+`Metrics` manager instance, then wrap the methods they wish to monitor. The
+example below demonstrates monitoring a function called `foo()`:
+
+```python
+from random import randint
+from metrics.metrics import Metrics
+
+metricman = Metrics(__file__)
+foo_obj = None
+
+def foo():
+    print(f"Hello world {randint(0,1000000)}!")
+    if foo_obj is None:
+        ep1 = endpoints.Endpoint(endpoint="/", id=foo)
+        foo_obj = flow.FlowNode(ep1, name="Object1")
+
+    metricman.add_to_analytics(foo_obj, layerName="foo")
+```
+
+Users retrieve analytics using `metricman.display(id='foo')` for a specific
+method's metrics, or `metricman.display()` for all recorded data.
+
+## Additional resources
+
+See `tests/flow_test.py` in the repository for exploring additional capabilities.
+The GitHub repository contains downloadable archives and the complete source code.
+
+- GitHub: [anuran-roy/pymetrix](https://github.com/anuran-roy/pymetrix/)
+- Documentation: [anuran-roy.github.io/pymetrix](https://anuran-roy.github.io/pymetrix/)

@@ -1,25 +1,58 @@
 ---
-import "@workspace/ui/globals.css"
+import BaseLayout from "@/layouts/BaseLayout.astro"
+import PostCard from "@/components/PostCard.astro"
+import ProjectCard from "@/components/ProjectCard.astro"
+import SocialLinks from "@/components/SocialLinks.astro"
 import { Button } from "@workspace/ui/components/button"
+import { getBlogPosts, getProjects } from "@/lib/content"
+import { site } from "@/config/site"
+
+const latestPosts = (await getBlogPosts()).slice(0, 4)
+const featuredProjects = (await getProjects()).slice(0, 4)
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>Astro App</title>
-  </head>
-  <body>
-    <div class="flex min-h-svh p-6">
-      <div class="flex max-w-md min-w-0 flex-col gap-4 text-sm leading-loose">
-        <div>
-          <h1 class="font-medium">Project ready!</h1>
-          <p>You may now add components and start building.</p>
-          <p>We've already added the button component for you.</p>
-          <Button client:load className="mt-2">Button</Button>
-        </div>
-      </div>
+<BaseLayout>
+  <section class="py-8 sm:py-12">
+    <p class="font-mono text-sm text-muted-foreground">{site.tagline}</p>
+    <h1 class="mt-4 font-heading text-4xl font-bold tracking-tight sm:text-5xl">
+      Hi, I'm {site.author.name}.
+    </h1>
+    <p class="mt-4 max-w-2xl text-lg text-muted-foreground">
+      {site.author.bio}
+    </p>
+    <div class="mt-6 flex flex-wrap items-center gap-3">
+      <a href="/blog"><Button>Read the blog</Button></a>
+      <a href="/projects"><Button variant="outline">View projects</Button></a>
     </div>
-  </body>
-</html>
+    <div class="mt-6">
+      <SocialLinks />
+    </div>
+  </section>
+
+  <section class="border-t border-border py-10">
+    <div class="mb-5 flex items-baseline justify-between">
+      <h2 class="font-heading text-xl font-semibold">Latest posts</h2>
+      <a href="/blog" class="text-sm text-muted-foreground hover:text-foreground">
+        All posts →
+      </a>
+    </div>
+    <div class="grid gap-4 sm:grid-cols-2">
+      {latestPosts.map((post) => <PostCard post={post} />)}
+    </div>
+  </section>
+
+  <section class="border-t border-border py-10">
+    <div class="mb-5 flex items-baseline justify-between">
+      <h2 class="font-heading text-xl font-semibold">Projects</h2>
+      <a
+        href="/projects"
+        class="text-sm text-muted-foreground hover:text-foreground"
+      >
+        All projects →
+      </a>
+    </div>
+    <div class="grid gap-4 sm:grid-cols-2">
+      {featuredProjects.map((project) => <ProjectCard project={project} />)}
+    </div>
+  </section>
+</BaseLayout>

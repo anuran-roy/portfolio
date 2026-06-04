@@ -1,0 +1,79 @@
+---
+title: "Machine learning and the Pythonic buzz"
+description: "A beginner-friendly introduction to machine learning with Python and scikit-learn, building a first model on the Boston housing dataset."
+date: 2021-08-29
+author: "Anuran Roy"
+tags: ["python", "machine-learning", "scikit-learn", "beginner", "ai"]
+categories: ["blog"]
+comments: true
+---
+
+## Introduction
+
+> "Predicting the future isn't magic, it's artificial intelligence" ~ Dave Waters
+
+Machine learning represents one of artificial intelligence's most compelling
+applications.
+
+## So what is machine learning?
+
+Machine learning applies statistical modeling to identify patterns in data,
+enabling predictions on previously unseen information.
+
+Consider a business scenario: you want to forecast quarterly profits across
+multiple products. While manual pattern recognition works for small datasets,
+statistical approaches scale better. Machine learning automates these statistical
+processes across hundreds or thousands of products and millions of observations,
+delivering reliable predictions when provided quality data.
+
+## Where does Python come in here?
+
+Python excels at rapid prototyping. Libraries like **matplotlib**,
+**scikit-learn**, **numpy**, **pandas**, and **scipy** make "data visualization,
+large-scale computation, data manipulation and machine learning accessible like
+never before." Combined with Jupyter notebooks, Python offers an accessible
+machine learning workflow.
+
+## Talk is cheap. Show me the code.
+
+This tutorial uses **scikit-learn** and the Boston housing dataset to predict
+house prices.
+
+### Step 0: Installation
+
+Download Python from [python.org](https://www.python.org). Install dependencies
+via:
+
+```bash
+pip install numpy scikit-learn
+```
+
+### Steps 1–6: Building your model
+
+```python
+from sklearn.tree import DecisionTreeRegressor as dtr
+import numpy as np
+from sklearn.datasets import load_boston
+
+data = load_boston()
+model = dtr()
+model.fit(data.data[:400], data.target[:400])
+predictions = model.predict(data.data[400:])
+results = np.isclose(predictions, data.target[400:], atol=5, equal_nan=True)
+```
+
+With a ±5 threshold, most predictions match actual values accurately.
+
+## Bonus: visualizing the model
+
+The decision tree can be visualized using
+[WebGraphViz](http://www.webgraphviz.com/) for deeper model understanding.
+
+## Conclusion
+
+You've built your first machine learning model! Explore concepts like underfitting
+and overfitting next.
+
+{/* TODO: The original post contained a longer step-by-step walkthrough and a
+decision-tree visualization snippet that were only partially captured during
+migration. Reproduce them in full from the original source if available. */}

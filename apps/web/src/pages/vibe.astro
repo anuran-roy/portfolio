@@ -1,0 +1,48 @@
+---
+import { render } from "astro:content"
+import BaseLayout from "@/layouts/BaseLayout.astro"
+import { getVibes, formatDate } from "@/lib/content"
+
+const vibes = await getVibes()
+const rendered = await Promise.all(
+  vibes.map(async (vibe) => ({ vibe, Content: (await render(vibe)).Content }))
+)
+---
+
+<BaseLayout
+  title="Vibe"
+  description="Short-form notes, moods, and moments."
+  width="narrow"
+>
+  <header class="mb-8">
+    <h1 class="font-heading text-3xl font-bold tracking-tight">Vibe</h1>
+    <p class="mt-2 text-muted-foreground">
+      A timeline of short-form notes and moments.
+    </p>
+  </header>
+
+  <ol class="space-y-6 border-l border-border pl-6">
+    {
+      rendered.map(({ vibe, Content }) => (
+        <li class="relative">
+          <span
+            class="absolute -left-[1.65rem] top-1.5 size-2 rounded-full bg-foreground"
+            aria-hidden="true"
+          />
+          <div class="flex flex-wrap items-center gap-x-2 text-xs text-muted-foreground">
+            <time datetime={vibe.data.date.toISOString()}>
+              {formatDate(vibe.data.date)}
+            </time>
+            {vibe.data.mood && (
+              <span class="font-mono">· {vibe.data.mood}</span>
+            )}
+            {vibe.data.location && <span>· {vibe.data.location}</span>}
+          </div>
+          <div class="prose prose-sm prose-neutral mt-1 max-w-none dark:prose-invert">
+            <Content />
+          </div>
+        </li>
+      ))
+    }
+  </ol>
+</BaseLayout>

@@ -1,0 +1,41 @@
+---
+import type { GetStaticPaths } from "astro"
+import BaseLayout from "@/layouts/BaseLayout.astro"
+import PostCard from "@/components/PostCard.astro"
+import { getBlogPosts, type BlogPost } from "@/lib/content"
+
+export const getStaticPaths = (async () => {
+  const posts = await getBlogPosts()
+  const seriesNames = [
+    ...new Set(posts.map((p) => p.data.series).filter(Boolean) as string[]),
+  ]
+  return seriesNames.map((series) => ({
+    params: { series: series.toLowerCase() },
+    props: {
+      series,
+      // Series read best oldest-first.
+      posts: posts
+        .filter((p) => p.data.series === series)
+        .sort((a, b) => a.data.date.valueOf() - b.data.date.valueOf()),
+    },
+  }))
+}) satisfies GetStaticPaths
+
+interface Props {
+  series: string
+  posts: BlogPost[]
+}
+const { series, posts } = Astro.props
+---
+
+<BaseLayout title={`Series: ${series}`}>
+  <header class="mb-8">
+    <p class="font-mono text-sm uppercase tracking-wide text-muted-foreground">
+      Series
+    </p>
+    <h1 class="mt-1 font-heading text-3xl font-bold tracking-tight">{series}</h1>
+  </header>
+  <div class="grid gap-4 sm:grid-cols-2">
+    {posts.map((post) => <PostCard post={post} />)}
+  </div>
+</BaseLayout>

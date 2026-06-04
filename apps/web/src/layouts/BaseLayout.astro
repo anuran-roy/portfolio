@@ -1,0 +1,108 @@
+---
+import "@workspace/ui/globals.css"
+import TopNav from "@/components/TopNav.astro"
+import Footer from "@/components/Footer.astro"
+import { site } from "@/config/site"
+
+interface Props {
+  title?: string
+  description?: string
+  /** Absolute or root-relative OG image URL. */
+  image?: string
+  /** Emit og:type=article (blog posts, project pages). */
+  article?: boolean
+  /** Container width: "wide" for listings/posts-with-sidebar, "narrow" for prose. */
+  width?: "wide" | "narrow"
+}
+
+const {
+  title,
+  description = site.description,
+  image,
+  article = false,
+  width = "wide",
+} = Astro.props
+
+const pageTitle = title ? `${title} · ${site.title}` : site.title
+const canonical = new URL(Astro.url.pathname, Astro.site).toString()
+const ogImage = image ? new URL(image, Astro.site).toString() : undefined
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title={site.title}
+      href="/rss.xml"
+    />
+    <link rel="canonical" href={canonical} />
+
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content={site.author.name} />
+    <meta name="generator" content={Astro.generator} />
+
+    <meta property="og:type" content={article ? "article" : "website"} />
+    <meta property="og:title" content={title ?? site.title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content={site.title} />
+    {ogImage && <meta property="og:image" content={ogImage} />}
+    <meta
+      name="twitter:card"
+      content={ogImage ? "summary_large_image" : "summary"}
+    />
+    {ogImage && <meta name="twitter:image" content={ogImage} />}
+
+    {/* FOUC-prevention: apply the theme before first paint, then persist changes. */}
+    <script is:inline>
+      const getThemePreference = () => {
+        if (
+          typeof localStorage !== "undefined" &&
+          localStorage.getItem("theme")
+        ) {
+          return localStorage.getItem("theme")
+        }
+        return window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? "dark"
+          : "light"
+      }
+      const isDark = getThemePreference() === "dark"
+      document.documentElement.classList.toggle("dark", isDark)
+
+      if (typeof localStorage !== "undefined") {
+        const observer = new MutationObserver(() => {
+          const isDark = document.documentElement.classList.contains("dark")
+          // Only persist an explicit choice; "system" clears the key elsewhere.
+          if (localStorage.getItem("theme")) {
+            localStorage.setItem("theme", isDark ? "dark" : "light")
+          }
+        })
+        observer.observe(document.documentElement, {
+          attributes: true,
+          attributeFilter: ["class"],
+        })
+      }
+    </script>
+
+    <slot name="head" />
+  </head>
+  <body class="flex min-h-svh flex-col bg-background text-foreground">
+    <TopNav />
+    <main
+      class:list={[
+        "mx-auto w-full flex-1 px-4 py-8 sm:px-6",
+        width === "narrow" ? "max-w-3xl" : "max-w-5xl",
+      ]}
+    >
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

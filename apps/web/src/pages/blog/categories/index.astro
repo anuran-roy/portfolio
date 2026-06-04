@@ -1,0 +1,26 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro"
+import { getBlogPosts, collectCategories } from "@/lib/content"
+
+const posts = await getBlogPosts()
+const categories = collectCategories(posts)
+---
+
+<BaseLayout title="Categories" width="narrow">
+  <h1 class="mb-6 font-heading text-3xl font-bold tracking-tight">Categories</h1>
+  <ul class="space-y-2">
+    {
+      categories.map(({ category, count }) => (
+        <li>
+          <a
+            href={`/blog/categories/${category}`}
+            class="flex items-center justify-between border border-border px-4 py-3 transition-colors hover:border-foreground/30"
+          >
+            <span class="font-mono uppercase tracking-wide">{category}</span>
+            <span class="text-sm text-muted-foreground">{count}</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</BaseLayout>

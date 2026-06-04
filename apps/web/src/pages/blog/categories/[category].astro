@@ -1,0 +1,43 @@
+---
+import type { GetStaticPaths } from "astro"
+import BaseLayout from "@/layouts/BaseLayout.astro"
+import PostCard from "@/components/PostCard.astro"
+import { getBlogPosts, collectCategories, type BlogPost } from "@/lib/content"
+
+export const getStaticPaths = (async () => {
+  const posts = await getBlogPosts()
+  return collectCategories(posts).map(({ category }) => ({
+    params: { category },
+    props: {
+      category,
+      posts: posts.filter((p) => p.data.categories.includes(category)),
+    },
+  }))
+}) satisfies GetStaticPaths
+
+interface Props {
+  category: string
+  posts: BlogPost[]
+}
+const { category, posts } = Astro.props
+---
+
+<BaseLayout title={`Category: ${category}`}>
+  <header class="mb-8">
+    <p class="font-mono text-sm uppercase tracking-wide text-muted-foreground">
+      Category
+    </p>
+    <h1 class="mt-1 font-heading text-3xl font-bold tracking-tight">
+      {category}
+    </h1>
+    <a
+      href="/blog/categories"
+      class="mt-2 inline-block text-sm text-muted-foreground hover:text-foreground"
+    >
+      ← All categories
+    </a>
+  </header>
+  <div class="grid gap-4 sm:grid-cols-2">
+    {posts.map((post) => <PostCard post={post} />)}
+  </div>
+</BaseLayout>

@@ -1,0 +1,40 @@
+---
+title: "Flow classes in Pymetrix"
+description: "A look at the Flow Class objects — FlowNode, FlowLayer, and FlowGraph — that form the building blocks of Pymetrix."
+date: 2021-11-20
+author: "Anuran Roy"
+tags: ["python", "analytics", "pymetrix", "foss"]
+categories: ["docs"]
+series: "Pymetrix"
+comments: true
+---
+
+The Flow Class objects make the building blocks of **Pymetrix** (previously
+**Analyx**). All Pymetrix functionality is constructed using these Flow Objects.
+
+## How do they work?
+
+Flow objects exist in three types:
+
+1. Flow Node
+2. Flow Layer
+3. Flow Graph
+
+The structure follows a hierarchical pattern where each successive element is a
+collection of the previous one.
+
+## Anatomy
+
+### `FlowNode()`
+
+`FlowNode` is the basic building block of the entire protocol. It has 10+ methods,
+and more than 5 attributes.
+
+**Attributes:**
+
+- `parents`
+
+{/* TODO: The original "Flow classes" page was only partially captured during
+migration — the full attribute and method listings (FlowNode, FlowLayer,
+FlowGraph) were truncated. Reproduce the complete reference from the original
+source. */}

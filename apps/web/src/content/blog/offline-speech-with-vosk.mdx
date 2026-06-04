@@ -1,0 +1,255 @@
+---
+title: "Offline Speech Recognition with Vosk"
+description: "Build an offline speech-to-command system in Python by combining Vosk for speech recognition with NLTK for keyword extraction."
+date: 2021-07-24
+author: "Anuran Roy"
+tags: ["python", "nlp", "vosk", "ai", "nltk", "foss"]
+categories: ["blog"]
+comments: true
+---
+
+## No more Sphinx
+
+The CMU Sphinx project, developed by Carnegie Mellon University, has not been
+actively maintained for approximately 5 years. However, this doesn't necessitate
+moving to production-oriented alternatives. The CMU Sphinx team has introduced a
+successor project called [Vosk](https://alphacephei.com/vosk).
+
+While other production solutions exist — such as OpenVINO and Mozilla DeepSpeech
+— this post prioritizes ease of setup and implementation.
+
+### Okay, I don't know what you are talking about. Please explain more.
+
+According to the official CMU Sphinx wiki, the project provides "an open-source
+toolkit for speech recognition" developed at Carnegie Mellon University.
+
+#### I get it, but why do you call this dead?
+
+The official CMU Sphinx blog shows minimal recent activity, with the most recent
+posts dating back several years. A YCombinator discussion also reflects community
+concerns about the project's maintenance status and future development.
+
+### Okay I get it. So what now?
+
+The CMU Sphinx website itself acknowledges the limitations of the original
+project. While I had extensive Sphinx experience, I found Vosk offered a "gentle
+learning curve" with surprisingly accessible implementation.
+
+This post demonstrates how to create a Python script combining Vosk for speech
+recognition with NLTK for keyword extraction, enabling voice-controlled
+applications.
+
+## Setting up
+
+### Stage 0: Resolving system-level dependencies
+
+Required tools:
+
+1. Linux system (Ubuntu recommended; Windows/Mac compatible for programming)
+2. PulseAudio audio drivers
+3. Python 3.8 with pip
+4. Internet connection
+5. IDE (VSCode recommended)
+6. Microphone
+
+For Debian/Ubuntu systems, run:
+
+```bash
+sudo apt-get install gcc automake autoconf libtool bison swig python3-dev
+sudo apt-get install libpulse-dev jackd libasound2-dev
+```
+
+> **Note:** Execute these commands separately. The `libasound2-dev` and `jackd`
+> packages require `swig` to build driver code. If issues occur with `swig`,
+> search error messages with "CMU Sphinx" as a keyword.
+
+### Stage 1: Setting up Vosk-API
+
+Clone the Vosk-API repository:
+
+```bash
+git clone https://github.com/alphacep/vosk-api.git
+```
+
+Alternatively, [download from GitHub](https://github.com/alphacep/vosk-api).
+
+Create a project folder structure:
+
+```text
+speech2command
+     |_______ vosk-api
+     |_______ ...
+```
+
+### Stage 2: Setting up a language model
+
+Vosk supports language-specific models for over 18 languages, including Greek,
+Turkish, Chinese, and Indian English. Models enable Vosk to recognize speech
+across different languages.
+
+Download the
+[small American English model](http://alphacephei.com/vosk/models/vosk-model-small-en-us-0.15.zip)
+(approximately 40 MB). Extract and rename the folder to `model`:
+
+```text
+speech2command
+     |_______ vosk-api
+     |_______ model
+     |_______ ...
+```
+
+### Stage 3: Setting up Python Packages
+
+Required packages:
+
+1. platform (built-in)
+2. Speech Recognition
+3. NLTK
+4. JSON (built-in)
+5. sys (built-in)
+6. Vosk
+
+Install external packages:
+
+```bash
+pip install nltk speech_recognition vosk
+```
+
+### Stage 4: Setting up NLTK Packages
+
+Install NLTK components: `stopwords`, `averaged_perceptron_tagger`, `punkt`, and
+`wordnet`.
+
+```python
+nltk.download("stopwords")
+nltk.download("averaged_perceptron_tagger")
+nltk.download("punkt")
+nltk.download("wordnet")
+```
+
+Or in one command:
+
+```python
+nltk.download("stopwords", "averaged_perceptron_tagger", "punkt", "wordnet")
+```
+
+### Stage 5: Programming with Vosk and NLTK
+
+Create a Python file `s2c.py` in the project folder:
+
+```text
+speech2command
+     |_______ vosk-api
+     |_______ model
+     |_______ s2c.py
+     |_______ ...
+```
+
+#### Code Implementation
+
+```python
+import platform
+import speech_recognition as sr
+import nltk
+from nltk.stem import WordNetLemmatizer
+from nltk.corpus import stopwords, wordnet
+import sys
+import vosk
+import json
+from vosk import SetLogLevel
+
+SetLogLevel(-1) # Hide Vosk logs
+
+p = platform.system()
+
+
+def listen():
+    rec = sr.Recognizer()
+    with sr.Microphone() as src:
+        rec.adjust_for_ambient_noise(src)
+        audio = rec.listen(src)
+    try:
+        cmd = rec.recognize_vosk(audio) # Connecting to Vosk API
+    except Exception:
+        print("Sorry, couldn't hear. Mind trying typing it?")
+        cmd = input()
+    return cmd
+
+
+def pos_tagger(tag):
+    if tag.startswith('J'):
+        return wordnet.ADJ
+    elif tag.startswith('V'):
+        return wordnet.VERB
+    elif tag.startswith('N'):
+        return wordnet.NOUN
+    elif tag.startswith('R'):
+        return wordnet.ADV
+    else:
+        return None
+
+
+def lemmatizer(src):
+    w = WordNetLemmatizer()
+    pos_tagged = nltk.pos_tag(nltk.word_tokenize(src))
+    wn_tagged = list(map(lambda x: (x[0], pos_tagger(x[1])), pos_tagged))
+    ls = []  # lemmatized sentence
+    for word, tag in wn_tagged:
+        if tag is None:
+            ls.append(word)
+        else:
+            ls.append(w.lemmatize(word, tag))
+    return ls
+
+
+def make_tokens(lms):
+    stop_words = set(stopwords.words('english'))
+    src3 = []
+    for i in lms:
+        if i in stop_words:
+            pass
+        else:
+            src3.append(str(i)+" ")
+    print("Keywords are:", end=' ')
+    for i in src3:
+        print(i, end=' ')
+
+
+try:
+    while True:
+        print("\nSay some words: ")
+        c = listen()
+        print("Listened value=",c)
+        d = json.loads(c)
+        print("Command =", d["text"])
+        if str(d["text"]).rstrip(" ") in ['stop', 'exit', 'bye', 'quit', 'terminate', 'kill', 'end']:
+            print("\n\nExit command triggered from command! Exiting...")
+            sys.exit()
+        lemmatized = lemmatizer(d["text"])
+        make_tokens(lemmatized)
+except KeyboardInterrupt:
+    print("\n\nExit command triggered from Keyboard! Exiting...")
+```
+
+Run the script to activate a continuous listener with terminal output. The system
+captures speech, processes it through Vosk, and extracts keywords using NLTK.
+
+For the complete source code, visit the
+[Vosk Demo repository](https://github.com/anuran-roy/vosk-demo).
+
+### Explanation
+
+The workflow operates as follows:
+
+1. Audio input captured from microphone
+2. Vosk processes audio and returns JSON with recognized text
+3. NLTK tokenizes the recognized text
+4. POS tagging identifies word types
+5. Lemmatization reduces words to base forms
+6. Stop word removal filters common words
+7. Keywords extracted and displayed
+
+## Conclusion
+
+This implementation provides a fully functional offline speech recognition system
+with keyword extraction, enabling voice control features for custom applications.

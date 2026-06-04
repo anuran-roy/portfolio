@@ -1,0 +1,48 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro"
+import { Card, CardContent } from "@workspace/ui/components/card"
+import { otherBlogs } from "@/config/site"
+---
+
+<BaseLayout
+  title="Other blogs"
+  description="External blogs and publications I write for."
+  width="narrow"
+>
+  <header class="mb-8">
+    <h1 class="font-heading text-3xl font-bold tracking-tight">Other blogs</h1>
+    <p class="mt-2 text-muted-foreground">
+      Places beyond this site where I write (or used to).
+    </p>
+  </header>
+  <div class="grid gap-4">
+    {
+      otherBlogs.map((blog) => (
+        <a
+          href={blog.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="group block"
+        >
+          <Card className="transition-colors group-hover:border-foreground/30">
+            <CardContent className="p-5">
+              <div class="flex items-center justify-between gap-2">
+                <h2 class="font-heading font-semibold group-hover:underline">
+                  {blog.name}
+                </h2>
+                {blog.handle && (
+                  <span class="font-mono text-xs text-muted-foreground">
+                    @{blog.handle}
+                  </span>
+                )}
+              </div>
+              <p class="mt-1 text-sm text-muted-foreground">
+                {blog.description}
+              </p>
+            </CardContent>
+          </Card>
+        </a>
+      ))
+    }
+  </div>
+</BaseLayout>

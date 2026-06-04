@@ -1,0 +1,64 @@
+---
+import type { GetStaticPaths } from "astro"
+import { render } from "astro:content"
+import BaseLayout from "@/layouts/BaseLayout.astro"
+import { Badge } from "@workspace/ui/components/badge"
+import { getProjects } from "@/lib/content"
+
+export const getStaticPaths = (async () => {
+  const projects = await getProjects()
+  return projects.map((project) => ({
+    params: { slug: project.id },
+    props: { project },
+  }))
+}) satisfies GetStaticPaths
+
+const { project } = Astro.props
+const { Content } = await render(project)
+const { title, description, tech, links } = project.data
+---
+
+<BaseLayout title={title} description={description} article width="narrow">
+  <header class="mb-8 border-b border-border pb-6">
+    <a
+      href="/projects"
+      class="text-sm text-muted-foreground hover:text-foreground"
+    >
+      ← All projects
+    </a>
+    <h1 class="mt-2 font-heading text-3xl font-bold tracking-tight">{title}</h1>
+    <p class="mt-2 text-muted-foreground">{description}</p>
+    {
+      tech.length > 0 && (
+        <div class="mt-4 flex flex-wrap gap-1.5">
+          {tech.map((t) => (
+            <Badge variant="outline" className="font-mono text-xs">
+              {t}
+            </Badge>
+          ))}
+        </div>
+      )
+    }
+    {
+      links.length > 0 && (
+        <div class="mt-4 flex flex-wrap gap-3 text-sm">
+          {links.map((link) => (
+            <a
+              href={link.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="underline-offset-4 hover:underline"
+            >
+              {link.label} ↗
+            </a>
+          ))}
+        </div>
+      )
+    }
+  </header>
+  <div
+    class="prose prose-neutral max-w-none dark:prose-invert prose-headings:font-heading prose-a:text-foreground"
+  >
+    <Content />
+  </div>
+</BaseLayout>

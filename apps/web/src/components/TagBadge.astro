@@ -1,0 +1,19 @@
+---
+import { Badge } from "@workspace/ui/components/badge"
+import { slugify } from "@/lib/content"
+
+interface Props {
+  tag: string
+  count?: number
+}
+const { tag, count } = Astro.props
+---
+
+<a href={`/blog/tags/${slugify(tag)}`}>
+  <Badge
+    variant="secondary"
+    className="font-mono text-xs transition-colors hover:bg-muted"
+  >
+    #{tag}{count !== undefined && <span class="ml-1 opacity-60">{count}</span>}
+  </Badge>
+</a>

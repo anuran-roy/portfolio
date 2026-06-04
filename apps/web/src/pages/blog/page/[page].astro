@@ -1,0 +1,45 @@
+---
+import type { GetStaticPaths, Page } from "astro"
+import BaseLayout from "@/layouts/BaseLayout.astro"
+import PostCard from "@/components/PostCard.astro"
+import { getBlogPosts, type BlogPost } from "@/lib/content"
+import { site } from "@/config/site"
+
+export const getStaticPaths = (async ({ paginate }) => {
+  const posts = await getBlogPosts()
+  return paginate(posts, { pageSize: site.blog.postsPerPage })
+}) satisfies GetStaticPaths
+
+interface Props {
+  page: Page<BlogPost>
+}
+const { page } = Astro.props
+---
+
+<BaseLayout title={`Blog · page ${page.currentPage}`}>
+  <header class="mb-8">
+    <h1 class="font-heading text-3xl font-bold tracking-tight">Blog</h1>
+  </header>
+
+  <div class="grid gap-4 sm:grid-cols-2">
+    {page.data.map((post) => <PostCard post={post} />)}
+  </div>
+
+  <nav class="mt-8 flex items-center justify-between text-sm">
+    <a href={page.currentPage === 2 ? "/blog" : page.url.prev} class="hover:underline">
+      ← Newer
+    </a>
+    <span class="text-muted-foreground">
+      Page {page.currentPage} of {page.lastPage}
+    </span>
+    {
+      page.url.next ? (
+        <a href={page.url.next} class="hover:underline">
+          Older →
+        </a>
+      ) : (
+        <span />
+      )
+    }
+  </nav>
+</BaseLayout>

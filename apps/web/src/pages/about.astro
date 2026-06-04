@@ -1,0 +1,24 @@
+---
+import { getEntry, render } from "astro:content"
+import BaseLayout from "@/layouts/BaseLayout.astro"
+import SocialLinks from "@/components/SocialLinks.astro"
+
+const about = await getEntry("about", "about")
+const { Content } = await render(about!)
+---
+
+<BaseLayout
+  title="About"
+  description={about!.data.description}
+  width="narrow"
+>
+  <article
+    class="prose prose-neutral max-w-none dark:prose-invert prose-headings:font-heading prose-a:text-foreground"
+  >
+    <h1>About</h1>
+    <Content />
+  </article>
+  <div class="mt-8 border-t border-border pt-6">
+    <SocialLinks />
+  </div>
+</BaseLayout>
