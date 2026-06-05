@@ -1,6 +1,3 @@
-import * as React from "react"
-import { FileText, Search } from "lucide-react"
-
 import { Button } from "@workspace/ui/components/button"
 import {
   CommandDialog,
@@ -10,6 +7,8 @@ import {
   CommandItem,
   CommandList,
 } from "@workspace/ui/components/command"
+import { FileText, Search } from "lucide-react"
+import * as React from "react"
 
 interface PagefindResultData {
   url: string
@@ -28,7 +27,7 @@ interface Pagefind {
 
 // Pagefind is generated into /pagefind during `astro build` and does not exist
 // during `astro dev`. The path is assembled from a variable so Vite cannot
-// statically resolve it (which would error in dev) — it is loaded at runtime.
+// statically resolve it (which would error in dev) - it is loaded at runtime.
 async function loadPagefind(): Promise<Pagefind | null> {
   const url = `${import.meta.env.BASE_URL}pagefind/pagefind.js`.replace(
     "//",

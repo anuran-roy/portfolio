@@ -30,14 +30,14 @@ export interface OtherBlog {
 export const site = {
   title: "A Tinkerer's Canvas",
   /** Used for <title> suffix and OG. */
-  shortTitle: "Anuran Roy",
+  shortTitle: "Anuran",
   tagline: "$ sudo apt-get install tinker-dev && sudo tinker.run()",
   description:
-    "Personal website and blog of Anuran Roy — notes on Python, machine learning, NLP, and open-source tinkering.",
+    "Anuran's journal on the internet - capturing his late-night breakdowns to his Eureka moments.",
   url: "https://anuran.dev",
   author: {
     name: "Anuran Roy",
-    bio: "Sleepy by day, coding by night. Student on weekdays, explorer on weekends. A machine that converts coffee to code.",
+    bio: "Tinkero-humorist, Claude flibbertigibbeter. A finite state machine that converts coffee to code.",
     email: "anuranroy02@gmail.com",
     avatar: "/images/avatar.jpg",
     resume: "/documents/cv.pdf",
@@ -84,7 +84,7 @@ export const otherBlogs: OtherBlog[] = [
     href: "https://tinker.hashnode.dev",
   },
   {
-    name: "CSED VIT — Newsletter & Articles",
+    name: "CSED VIT - Newsletter & Articles",
     description:
       "The Centre for Social Entrepreneurship and Development club blog, where I contribute to the Editorial and Technical departments.",
     href: "https://www.csedvit.com/",
