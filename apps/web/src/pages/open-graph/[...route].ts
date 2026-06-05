@@ -17,6 +17,11 @@ export const { getStaticPaths, GET } = await OGImageRoute({
 
   getImageOptions: (path, page) => ({
     title: page.title ?? 'Untitled',
-    description: 'description' in page ? page.description : '',
+    bgImage: {
+      path: "./public/images/avatar.jpeg",
+      fit: 'fill',
+      position: "center"
+    },
+    description: 'description' in page ? page.description : 'Well, it\'s (probably) a cool page. That\'s all I can tell you.',
   }),
 });
