@@ -10,39 +10,40 @@ const { post } = Astro.props
 const { title, description, date, tags, categories } = post.data
 ---
 
-<a href={`/blog/${post.id}`} class="group block">
-  <Card
-    className="h-full transition-colors group-hover:border-foreground/30"
-  >
-    <CardContent className="flex h-full flex-col gap-3 p-5">
-      <div class="flex items-center gap-2 text-xs text-muted-foreground">
-        <time datetime={date.toISOString()}>{formatDate(date)}</time>
-        {
-          categories.length > 0 && (
-            <>
-              <span aria-hidden="true">·</span>
-              <span class="font-mono uppercase tracking-wide">
-                {categories[0]}
-              </span>
-            </>
-          )
-        }
-      </div>
-      <h3
-        class="font-heading text-lg leading-snug font-semibold group-hover:underline"
-      >
-        {title}
-      </h3>
-      <p class="line-clamp-2 text-sm text-muted-foreground">{description}</p>
+<Card
+  className="group relative h-full transition-colors hover:border-foreground/30"
+>
+  <CardContent className="flex h-full flex-col gap-3 p-5">
+    <div class="flex items-center gap-2 text-xs text-muted-foreground">
+      <time datetime={date.toISOString()}>{formatDate(date)}</time>
       {
-        tags.length > 0 && (
-          <div class="mt-auto flex flex-wrap gap-1.5 pt-2">
-            {tags.slice(0, 4).map((tag) => (
-              <TagBadge tag={tag} />
-            ))}
-          </div>
+        categories.length > 0 && (
+          <>
+            <span aria-hidden="true">·</span>
+            <span class="font-mono uppercase tracking-wide">
+              {categories[0]}
+            </span>
+          </>
         )
       }
-    </CardContent>
-  </Card>
-</a>
+    </div>
+    <h3 class="font-heading text-lg leading-snug font-semibold">
+      <a
+        href={`/blog/${post.id}`}
+        class="after:absolute after:inset-0 group-hover:underline"
+      >
+        {title}
+      </a>
+    </h3>
+    <p class="line-clamp-2 text-sm text-muted-foreground">{description}</p>
+    {
+      tags.length > 0 && (
+        <div class="relative z-10 mt-auto flex flex-wrap gap-1.5 pt-2">
+          {tags.slice(0, 4).map((tag) => (
+            <TagBadge tag={tag} />
+          ))}
+        </div>
+      )
+    }
+  </CardContent>
+</Card>

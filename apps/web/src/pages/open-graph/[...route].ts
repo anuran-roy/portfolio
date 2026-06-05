@@ -1,7 +1,7 @@
+import { site } from '@/config/site';
 import { OGImageRoute } from 'astro-og-canvas';
 import { getCollection } from 'astro:content';
 import { fileURLToPath } from 'node:url';
-import { site } from '@/config/site';
 
 // astro-og-canvas reads bgImage off the filesystem at build time (fs.readFile),
 // so resolve it from this module rather than the cwd — the monorepo build may
@@ -28,6 +28,7 @@ export const { getStaticPaths, GET } = await OGImageRoute({
 
   getImageOptions: (path, page) => ({
     title: page.title ?? 'Untitled',
+
     bgImage: {
       path: avatarPath,
       fit: 'fill',
