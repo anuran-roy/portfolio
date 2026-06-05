@@ -18,7 +18,13 @@ const { Content } = await render(project)
 const { title, description, tech, links } = project.data
 ---
 
-<BaseLayout title={title} description={description} article width="narrow">
+<BaseLayout
+  title={title}
+  description={description}
+  image={`/open-graph/${project.id}.png`}
+  article
+  width="narrow"
+>
   <header class="mb-8 border-b border-border pb-6">
     <a
       href="/projects"

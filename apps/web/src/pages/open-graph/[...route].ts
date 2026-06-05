@@ -1,5 +1,11 @@
 import { OGImageRoute } from 'astro-og-canvas';
 import { getCollection } from 'astro:content';
+import { fileURLToPath } from 'node:url';
+
+// astro-og-canvas reads bgImage off the filesystem at build time (fs.readFile),
+// so resolve it from this module rather than the cwd — the monorepo build may
+// run from the repo root, where a cwd-relative "./public/..." would not exist.
+const avatarPath = fileURLToPath(new URL('../../../public/images/avatar.jpeg', import.meta.url));
 
 const collectionEntries = [...(await getCollection('about')), ...(await getCollection('blog')), ...(await getCollection('papers')), ...(await getCollection('projects')), ...(await getCollection('vibe'))];
 
@@ -18,7 +24,7 @@ export const { getStaticPaths, GET } = await OGImageRoute({
   getImageOptions: (path, page) => ({
     title: page.title ?? 'Untitled',
     bgImage: {
-      path: "./public/images/avatar.jpeg",
+      path: avatarPath,
       fit: 'fill',
       position: "center"
     },

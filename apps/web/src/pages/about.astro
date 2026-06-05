@@ -10,6 +10,7 @@ const { Content } = await render(about!)
 <BaseLayout
   title="About"
   description={about!.data.description}
+  image={`/open-graph/${about!.id}.png`}
   width="narrow"
 >
   <article

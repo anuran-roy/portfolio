@@ -18,7 +18,13 @@ const { Content } = await render(paper)
 const { title, description, tags, doi, links } = paper.data
 ---
 
-<BaseLayout title={title} description={description} article width="narrow">
+<BaseLayout
+  title={title}
+  description={description}
+  image={`/open-graph/${paper.id}.png`}
+  article
+  width="narrow"
+>
   <header class="mb-8 border-b border-border pb-6">
     <a
       href="/papers"

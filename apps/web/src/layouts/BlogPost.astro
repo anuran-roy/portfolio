@@ -23,7 +23,13 @@ const { title, description, date, tags, categories, series, comments } =
 const showComments = comments && giscusConfigured
 ---
 
-<BaseLayout title={title} description={description} article width="wide">
+<BaseLayout
+  title={title}
+  description={description}
+  image={`/open-graph/${post.id}.png`}
+  article
+  width="wide"
+>
   <div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_220px]">
     <article class="min-w-0">
       <header class="mb-8 border-b border-border pb-6">
