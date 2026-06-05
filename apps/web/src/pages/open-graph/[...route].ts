@@ -1,6 +1,7 @@
 import { OGImageRoute } from 'astro-og-canvas';
 import { getCollection } from 'astro:content';
 import { fileURLToPath } from 'node:url';
+import { site } from '@/config/site';
 
 // astro-og-canvas reads bgImage off the filesystem at build time (fs.readFile),
 // so resolve it from this module rather than the cwd — the monorepo build may
@@ -12,7 +13,11 @@ const collectionEntries = [...(await getCollection('about')), ...(await getColle
 // Map the array of content collection entries to create an object.
 // Converts [{ id: 'post.md', data: { title: 'Example', description: '' } }]
 // to { 'post.md': { title: 'Example', description: '' } }
-const pages = Object.fromEntries(collectionEntries.map(({ id, data }) => [id, data]));
+const pages = {
+  // Default OG image for non-content routes (homepage, listings, etc.).
+  site: { title: site.title, description: site.description },
+  ...Object.fromEntries(collectionEntries.map(({ id, data }) => [id, data])),
+};
 
 export const { getStaticPaths, GET } = await OGImageRoute({
   // Tell us the name of your dynamic route segment.

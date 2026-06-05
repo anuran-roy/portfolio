@@ -25,7 +25,7 @@ const {
 
 const pageTitle = title ? `${title} · ${site.title}` : site.title
 const canonical = new URL(Astro.url.pathname, Astro.site).toString()
-const ogImage = image ? new URL(image, Astro.site).toString() : undefined
+const ogImage = new URL(image ?? "/open-graph/site.png", Astro.site).toString()
 ---
 
 <!doctype html>
