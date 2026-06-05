@@ -1,0 +1,102 @@
+---
+title: "LangTache"
+description: "Drop in replacements for popular LangChain types, without the OOP hell."
+order: 1
+status: "active"
+tech: ["Typescript", "AI Engineering", "OOP"]
+links:
+  - { label: "NPM", href: "https://www.npmjs.com/package/@anuran-roy/langtache" }
+  - { label: "Github", href: "https://github.com/anuran-roy/langtache" }
+  - {label: "Peerlist", href: "https://peerlist.io/anuranroy02224/project/langtache"}
+---
+A quick way to offramp from LangChain.
+
+Drop in replacements for popular LangChain types, without the OOP hell.
+
+## Why this?
+
+Well, LangChain is...not frankly what I would like to use anymore, something that I never thought I would do when I first tried it out in early 2023.
+
+Turns out, many other are facing the same situation, so I just decided to put up this small package.
+
+Also, from most use cases that I have seen (as per my limited knowledge), they involve just plain templating that could've been done with a templating language already. This project is a step in that direction, to reduce the OOP madness.
+
+## Examples
+### Example 1: Simple "Hello, world!" implementation
+
+```typescript helloLangtache.ts
+import { OpenAI } from 'openai';
+import { ChatPromptTemplate, getStructuredOutput } from '../src';
+
+const chatClient = new OpenAI();
+const chatPrompt = new ChatPromptTemplate({
+  template: `Hello there, my name is {{name}}`,
+  inputVariables: ["name"],
+  templateFormat: 'mustache' // Currently only mustache is supported
+})
+
+const chatPromptChain = chatPrompt.pipe(chatClient);
+
+const chatPromptResult = await chatPromptChain.invoke(
+  'gpt-5-nano', // Invoke model during runtime - enables easy handoffs and orchestration in multi-agent systems.
+  {
+    "name": "Anuran"
+  });
+
+console.log(chatPromptResult.choices[0]?.message?.content?.toString() ?? 'No response content')
+```
+
+## Example 2: Structured output
+```typescript structuredOutputLangtache.ts
+import { OpenAI } from 'openai';
+import z from 'zod';
+import { ChatPromptTemplate, getStructuredOutput, getValidatedOutput } from '@anuran-roy/langtache';
+
+const chatClient = new OpenAI();
+const chatPromptStructuredOutput = new ChatPromptTemplate({
+  template: `Given the user's Linkedin bio, return their name, role and company name in a JSON format. The data is:
+  \`\`\`
+  {{bio}}
+  \`\`\``,
+  inputVariables: ["bio"],
+  templateFormat: 'mustache' // Currently only mustache is supported
+});
+
+const structuredOutputSchema = z.object({
+  "name": z.string(),
+  "company": z.string(),
+  "role": z.string()
+});
+
+const structuredOutputGenerator = getStructuredOutput(structuredOutputSchema);
+const input = {
+  "bio": "Hey there, I am Anuran. I am the co-founder and CTO at Alchemyst AI."
+}
+
+const chatPromptStructedOutput = chatPromptStructuredOutput.format(input);
+
+const finalPrompt = structuredOutputGenerator(chatPromptStructedOutput);
+
+const chatPromptStructuredOutputResult = await chatClient.chat.completions.create({
+  messages: [
+    {
+      "content": finalPrompt,
+      role: "user"
+    }
+  ],
+  model: "gpt-5-nano"
+})
+
+const receivedResponse = chatPromptStructuredOutputResult.choices[0]?.message?.content?.toString() ?? 'No response content'
+console.log(receivedResponse)
+
+// Now validate it
+
+const validatedOutput = getValidatedOutput(structuredOutputSchema, receivedResponse)
+
+if (validatedOutput.error) { // Escape hatch in case of error
+  console.error(validatedOutput.error)
+} else if (validatedOutput.data) { // If LLM response is good.
+  console.info(validatedOutput.data) // Ensures that the output type is always of type z.infer<typeof structuredOutputSchema>;
+}
+```

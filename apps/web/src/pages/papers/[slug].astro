@@ -1,0 +1,79 @@
+---
+import type { GetStaticPaths } from "astro"
+import { render } from "astro:content"
+import BaseLayout from "@/layouts/BaseLayout.astro"
+import { Badge } from "@workspace/ui/components/badge"
+import { getPapers } from "@/lib/content"
+
+export const getStaticPaths = (async () => {
+  const papers = await getPapers()
+  return papers.map((paper) => ({
+    params: { slug: paper.id },
+    props: { paper },
+  }))
+}) satisfies GetStaticPaths
+
+const { paper } = Astro.props
+const { Content } = await render(paper)
+const { title, description, tags, doi, links } = paper.data
+---
+
+<BaseLayout title={title} description={description} article width="narrow">
+  <header class="mb-8 border-b border-border pb-6">
+    <a
+      href="/papers"
+      class="text-sm text-muted-foreground hover:text-foreground"
+    >
+      ← All papers
+    </a>
+    <h1 class="mt-2 font-heading text-3xl font-bold tracking-tight">{title}</h1>
+    <p class="mt-2 text-muted-foreground">{description}</p>
+    {
+      tags.length > 0 && (
+        <div class="mt-4 flex flex-wrap gap-1.5">
+          {tags.map((t) => (
+            <Badge variant="outline" className="font-mono text-xs">
+              {t}
+            </Badge>
+          ))}
+        </div>
+      )
+    }
+    {
+      doi && (
+        <p class="mt-4 text-sm">
+          <span class="text-muted-foreground">DOI: </span>
+          <a
+            href={`https://doi.org/${doi}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="font-mono underline-offset-4 hover:underline"
+          >
+            {doi}
+          </a>
+        </p>
+      )
+    }
+    {
+      links.length > 0 && (
+        <div class="mt-4 flex flex-wrap gap-3 text-sm">
+          {links.map((link) => (
+            <a
+              href={link.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="underline-offset-4 hover:underline"
+            >
+              {link.label} ↗
+            </a>
+          ))}
+        </div>
+      )
+    }
+  </header>
+  <div
+    class="prose prose-neutral max-w-none dark:prose-invert prose-headings:font-heading prose-a:text-foreground"
+  >
+    <Content />
+  </div>
+</BaseLayout>

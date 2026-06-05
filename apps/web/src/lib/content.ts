@@ -3,6 +3,7 @@ import readingTime from "reading-time"
 
 export type BlogPost = CollectionEntry<"blog">
 export type Project = CollectionEntry<"projects">
+export type Paper = CollectionEntry<"papers">
 export type Vibe = CollectionEntry<"vibe">
 
 const isProd = import.meta.env.PROD
@@ -22,6 +23,15 @@ export async function getBlogPosts(): Promise<BlogPost[]> {
 export async function getProjects(): Promise<Project[]> {
   const projects = await getCollection("projects", published)
   return projects.sort(
+    (a, b) =>
+      a.data.order - b.data.order || a.data.title.localeCompare(b.data.title)
+  )
+}
+
+/** All published papers, ordered by `order` then title. */
+export async function getPapers(): Promise<Paper[]> {
+  const papers = await getCollection("papers", published)
+  return papers.sort(
     (a, b) =>
       a.data.order - b.data.order || a.data.title.localeCompare(b.data.title)
   )

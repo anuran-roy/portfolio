@@ -1,4 +1,4 @@
-# web — anuran.dev portfolio
+# web - anuran.dev portfolio
 
 Astro portfolio for **Anuran Roy** ("A Tinkerer's Canvas"), migrated from the
 legacy static site. Built on the shared `@workspace/ui` shadcn design system with
@@ -55,9 +55,9 @@ The Giscus theme follows the site's light/dark toggle automatically.
 
 ## Assets to add
 
-- `public/documents/cv.pdf` — linked from the nav ("CV").
-- `public/images/avatar.jpg` — referenced by `site.author.avatar`.
-- `public/favicon.svg` — already present; replace if desired.
+- `public/documents/cv.pdf` - linked from the nav ("CV").
+- `public/images/avatar.jpg` - referenced by `site.author.avatar`.
+- `public/favicon.svg` - already present; replace if desired.
 
 ## Legacy URL redirects
 

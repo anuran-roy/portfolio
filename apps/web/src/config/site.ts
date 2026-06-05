@@ -51,6 +51,7 @@ export const navLinks: NavLink[] = [
   { label: "Home", href: "/" },
   { label: "Blog", href: "/blog" },
   { label: "Projects", href: "/projects" },
+  { label: "Papers", href: "/papers" },
   { label: "Vibe", href: "/vibe" },
   { label: "About", href: "/about" },
   { label: "Other blogs", href: "/other-blogs" },
@@ -65,16 +66,6 @@ export const socialLinks: SocialLink[] = [
     icon: "linkedin",
   },
   { label: "Twitter", href: "https://twitter.com/AnuranRoy", icon: "twitter" },
-  {
-    label: "Reddit",
-    href: "https://www.reddit.com/user/Ateenagerstudent",
-    icon: "reddit",
-  },
-  {
-    label: "HackerRank",
-    href: "https://www.hackerrank.com/anuranroy02",
-    icon: "hackerrank",
-  },
   { label: "Email", href: "mailto:anuranroy02@gmail.com", icon: "mail" },
   { label: "RSS", href: "/rss.xml", icon: "rss" },
 ]

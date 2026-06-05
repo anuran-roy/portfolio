@@ -1,6 +1,6 @@
 ---
-import BaseLayout from "@/layouts/BaseLayout.astro"
 import ProjectCard from "@/components/ProjectCard.astro"
+import BaseLayout from "@/layouts/BaseLayout.astro"
 import { getProjects } from "@/lib/content"
 
 const projects = await getProjects()
@@ -10,7 +10,7 @@ const projects = await getProjects()
   <header class="mb-8">
     <h1 class="font-heading text-3xl font-bold tracking-tight">Projects</h1>
     <p class="mt-2 text-muted-foreground">
-      Open-source libraries and experiments, mostly in Python.
+      Open-source libraries and experiments, spread across most of the tech I have learnt so far.
     </p>
   </header>
   <div class="grid gap-4 sm:grid-cols-2">

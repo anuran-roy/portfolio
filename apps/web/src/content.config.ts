@@ -33,6 +33,22 @@ const projects = defineCollection({
   }),
 })
 
+const papers = defineCollection({
+  loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/papers" }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    date: z.coerce.date().optional(),
+    draft: z.boolean().default(false),
+    order: z.number().default(0),
+    tags: z.array(z.string()).default([]),
+    doi: z.string().optional(),
+    links: z
+      .array(z.object({ label: z.string(), href: z.string().url() }))
+      .default([]),
+  }),
+})
+
 const vibe = defineCollection({
   loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/vibe" }),
   schema: z.object({
@@ -54,4 +70,4 @@ const about = defineCollection({
   }),
 })
 
-export const collections = { blog, projects, vibe, about }
+export const collections = { blog, projects, papers, vibe, about }

@@ -25,6 +25,7 @@
     "@workspace/ui": "workspace:*",
     "astro": "^6",
     "astro-expressive-code": "^0.42.0",
+    "astro-llms-md": "^2.2.0",
     "lucide-react": "^1.17.0",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",

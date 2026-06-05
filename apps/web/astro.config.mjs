@@ -1,13 +1,14 @@
 // @ts-check
 
-import tailwindcss from "@tailwindcss/vite"
-import { defineConfig } from "astro/config"
-import react from "@astrojs/react"
 import mdx from "@astrojs/mdx"
+import react from "@astrojs/react"
 import sitemap from "@astrojs/sitemap"
-import expressiveCode from "astro-expressive-code"
-import { pluginLineNumbers } from "@expressive-code/plugin-line-numbers"
 import { pluginCollapsibleSections } from "@expressive-code/plugin-collapsible-sections"
+import { pluginLineNumbers } from "@expressive-code/plugin-line-numbers"
+import tailwindcss from "@tailwindcss/vite"
+import expressiveCode from "astro-expressive-code"
+import llms from "astro-llms-md"
+import { defineConfig } from "astro/config"
 
 // https://astro.build/config
 export default defineConfig({
@@ -40,6 +41,7 @@ export default defineConfig({
     mdx(),
     react(),
     sitemap(),
+    llms()
   ],
   // Preserve SEO from the legacy static site's sitemap by 301-ing old URLs.
   redirects: {

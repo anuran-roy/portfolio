@@ -1,0 +1,13 @@
+---
+title: "Is a Large Context Window all you need?"
+description: "Exploring Time To First Token (TTFT)-context size tradeoff for Autoregressive LLMs"
+order: 1
+tags: ["Deep Learning", "Context Windows", "Large Language Models", "Context Engineering"]
+links:
+  - { label: "engrXiv", href: "https://engrxiv.org/preprint/view/4666"}
+---
+Recent advancements in auto-regressive large language models (henceforth referred to as LLMs) have significantly expanded context window capacities, with Meta's Llama 4 Scout achieving a 10 million token input length . This expansion is facilitated by techniques like Rotary Position Embedding (RoPE) and YaRN (Yet Another Rope extensioN), which encodes positional information through rotational transformations, enabling models to process longer sequences effectively.
+
+This advancement opens up a host of opportunities for the ubiquitious LLMs. Yet, attention mechanisms barely sub-quadratic in their nature. This means that extending context windows introduces challenges in latencies, especially in scenarios where even sub-second delays can result in catastrophic failures at scale in real-life use cases, many of which can be silent.
+
+This paper examines the trade-offs between context sizes and latencies, highlighting the need for improved context retrieval strategies that do not bloat query sizes to the concerned Large Language Models.

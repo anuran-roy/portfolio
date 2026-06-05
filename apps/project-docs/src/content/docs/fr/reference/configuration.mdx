@@ -75,7 +75,7 @@ type LogoConfig = { alt?: string; replacesTitle?: boolean } & (
 
 ### `tableOfContents`
 
-**type:** `false | { minHeadingLevel?: number; maxHeadingLevel?: number }`  
+**type:** `false | { minHeadingLevel?: number; maxHeadingLevel?: number }`
 **default:** `{ minHeadingLevel: 2, maxHeadingLevel: 3 }`
 
 Configure the table of contents shown on the right of each page. By default, `<h2>` and `<h3>` headings will be included in this table of contents.
@@ -105,13 +105,13 @@ Configure your site’s sidebar navigation items.
 A sidebar is an array of links and groups of links.
 With the exception of items using `slug`, each item must have a `label` and one of the following properties:
 
-- `link` — a single link to a specific URL, e.g. `'/home'` or `'https://example.com'`.
+- `link` - a single link to a specific URL, e.g. `'/home'` or `'https://example.com'`.
 
-- `slug` — a reference to an internal page, e.g. `'guides/getting-started'`.
+- `slug` - a reference to an internal page, e.g. `'guides/getting-started'`.
 
-- `items` — an array containing more sidebar links and subgroups.
+- `items` - an array containing more sidebar links and subgroups.
 
-- `autogenerate` — an object specifying a directory of your docs to automatically generate a group of links from.
+- `autogenerate` - an object specifying a directory of your docs to automatically generate a group of links from.
 
 Internal links can also be specified as a string instead of an object with a `slug` property.
 
@@ -381,14 +381,14 @@ starlight({
 
 ### `markdown`
 
-**type:** `{ headingLinks?: boolean }`  
+**type:** `{ headingLinks?: boolean }`
 **default:** `{ headingLinks: true }`
 
 Configure Starlight’s Markdown processing.
 
 #### `headingLinks`
 
-**type:** `boolean`  
+**type:** `boolean`
 **default:** `true`
 
 Controls whether or not headings are rendered with a clickable anchor link.
@@ -404,7 +404,7 @@ starlight({
 
 ### `expressiveCode`
 
-**type:** `StarlightExpressiveCodeOptions | boolean`  
+**type:** `StarlightExpressiveCodeOptions | boolean`
 **default:** `true`
 
 Starlight uses [Expressive Code](https://expressive-code.com) to render code blocks and add support for highlighting parts of code examples, adding filenames to code blocks, and more.
@@ -433,7 +433,7 @@ In addition to the standard Expressive Code options, you can also set the follow
 
 #### `themes`
 
-**type:** `Array<string | ThemeObject | ExpressiveCodeTheme>`  
+**type:** `Array<string | ThemeObject | ExpressiveCodeTheme>`
 **default:** `['starlight-dark', 'starlight-light']`
 
 Set the themes used to style code blocks.
@@ -446,7 +446,7 @@ Configure this behavior with the [`useStarlightDarkModeSwitch`](#usestarlightdar
 
 #### `useStarlightDarkModeSwitch`
 
-**type:** `boolean`  
+**type:** `boolean`
 **default:** `true`
 
 When `true`, code blocks automatically switch between light and dark themes when the site theme changes.
@@ -458,7 +458,7 @@ When setting `themes`, you must provide at least one dark and one light theme fo
 
 #### `useStarlightUiThemeColors`
 
-**type:** `boolean`  
+**type:** `boolean`
 **default:** `true` if `themes` is not set, otherwise `false`
 
 When `true`, Starlight's CSS variables are used for the colors of code block UI elements (backgrounds, buttons, shadows etc.), matching the [site color theme](/guides/css-and-tailwind/#theming).
@@ -470,7 +470,7 @@ When using custom themes and setting this to `true`, you must provide at least o
 
 ### `pagefind`
 
-**type:** <code>boolean | <a href="#pagefindoptions">PagefindOptions</a></code>  
+**type:** <code>boolean | <a href="#pagefindoptions">PagefindOptions</a></code>
 **default:** `true`
 
 Configure Starlight’s default site search provider [Pagefind](https://pagefind.app/).
@@ -515,7 +515,7 @@ interface PagefindOptions {
 
 ### `prerender`
 
-**type:** `boolean`  
+**type:** `boolean`
 **default:** `true`
 
 Define whether Starlight pages should be pre-rendered to static HTML or on-demand rendered by an [SSR adapter](https://docs.astro.build/en/guides/on-demand-rendering/).
@@ -561,7 +561,7 @@ interface HeadConfig {
 
 ### `lastUpdated`
 
-**type:** `boolean`  
+**type:** `boolean`
 **default:** `false`
 
 Control whether the footer shows when the page was last updated.
@@ -570,7 +570,7 @@ By default, this feature relies on your repository’s Git history and may not b
 
 ### `pagination`
 
-**type:** `boolean`  
+**type:** `boolean`
 **default:** `true`
 
 Define if the footer should include previous and next page links.
@@ -579,7 +579,7 @@ A page can override this setting or the link text and/or URL using the [`prev`](
 
 ### `favicon`
 
-**type:** `string`  
+**type:** `string`
 **default:** `'/favicon.svg'`
 
 Set the path of the default favicon for your website which should be located in the `public/` directory and be a valid (`.ico`, `.gif`, `.jpg`, `.png`, or `.svg`) icon file.
@@ -611,7 +611,7 @@ starlight({
 
 ### `titleDelimiter`
 
-**type:** `string`  
+**type:** `string`
 **default:** `'|'`
 
 Sets the delimiter between page title and site title in the page’s `<title>` tag, which is displayed on browser tabs.
@@ -621,7 +621,7 @@ For example, this page is titled “Configuration Reference” and this site is 
 
 ### `disable404Route`
 
-**type:** `boolean`  
+**type:** `boolean`
 **default:** `false`
 
 Disables injecting Starlight's default [404 page](https://docs.astro.build/en/basics/astro-pages/#custom-404-error-page). To use a custom `src/pages/404.astro` route in your project, set this option to `true`.
@@ -670,7 +670,7 @@ See the [Plugins Reference](/reference/plugins/) for details about creating your
 
 ### `credits`
 
-**type:** `boolean`  
+**type:** `boolean`
 **default:** `false`
 
 Enable displaying a “Built with Starlight” link in your site’s footer.
@@ -770,7 +770,7 @@ import { docsSchema } from '@astrojs/starlight/schema';
 
 ###### `extend`
 
-**type:** Zod schema or function that returns a Zod schema  
+**type:** Zod schema or function that returns a Zod schema
 **default:** `z.object({})`
 
 Extend Starlight’s frontmatter schema with additional fields.
@@ -790,7 +790,7 @@ import { i18nSchema } from '@astrojs/starlight/schema';
 
 ###### `extend`
 
-**type:** Zod object  
+**type:** Zod object
 **default:** `z.object({})`
 
 Extend Starlight’s i18n schema with additional fields.

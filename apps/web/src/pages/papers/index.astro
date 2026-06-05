@@ -1,0 +1,19 @@
+---
+import PaperCard from "@/components/PaperCard.astro"
+import BaseLayout from "@/layouts/BaseLayout.astro"
+import { getPapers } from "@/lib/content"
+
+const papers = await getPapers()
+---
+
+<BaseLayout title="Papers" description="Research papers and writing by Anuran Roy.">
+  <header class="mb-8">
+    <h1 class="font-heading text-3xl font-bold tracking-tight">Papers</h1>
+    <p class="mt-2 text-muted-foreground">
+      Research papers and technical writing across the topics I have explored.
+    </p>
+  </header>
+  <div class="grid gap-4 sm:grid-cols-2">
+    {papers.map((paper) => <PaperCard paper={paper} />)}
+  </div>
+</BaseLayout>
