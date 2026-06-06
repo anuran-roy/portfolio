@@ -66,8 +66,9 @@ export const socialLinks: SocialLink[] = [
     icon: "linkedin",
   },
   { label: "Twitter", href: "https://twitter.com/AnuranRoy", icon: "twitter" },
-  { label: "Email", href: "mailto:anuranroy02@gmail.com", icon: "mail" },
+  { label: "Email", href: "mailto:anuranroy02@gmail.com", icon: "email" },
   { label: "RSS", href: "/rss.xml", icon: "rss" },
+  { label: "llms.txt", href: "/llms.txt", icon: "text" },
 ]
 
 export const otherBlogs: OtherBlog[] = [
