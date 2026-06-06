@@ -1,0 +1,75 @@
+---
+title: "How to ACTUALLY build a \"Company Brain\""
+description: "Contextual AI Agents are the present, transforming every workplace. But an AI agent is only as correct as the context as it references."
+date: 2026-05-15
+author: "Anuran Roy"
+tags: ["ontology", "company brain", "ai memory", "context engineering"]
+categories: ["blog"]
+series: "Context Engineering in Production"
+comments: true
+---
+## Everybody wants one. Almost nobody has one.
+
+YC's Summer 2026 RFS put ["company brain"](https://x.com/ycombinator/status/2048834293779378437?s=20) into every pitch deck overnight. Agent startups pivoted to it. CRMs rebranded as "Work OS." SoR providers started calling themselves "Revenue WorkOS." The phrase went from niche infrastructure jargon to fundraising prerequisite in about six weeks. In fact, this craze ties to multiple interfaces, as evidenced from the "Voice-powered business operating system" thesis by @a16z in their "Big Ideas for 2026".
+
+The scramble produced two camps, each mistaking a piece for the whole.
+
+**The memory camp**. Providers like Mem0 and Zep capture conversations between AI and people. Valuable, but conversations account for a fraction of real business context. Your pricing logic, your compliance rules, your customer's integration constraints, the reason your sales team scoped a deal the way they did: none of that lives in a chat transcript.
+
+**The records camp**. The [thesis](https://x.com/GilFeig/status/2005669612571013530) by Foundation Capital ([@FoundationCap](https://x.com/FoundationCap)) Systems of Action captures execution traces: the outputs of agents doing work. That matters too, but traces are downstream artefacts. You can't capture them until you've solved the context problem that generates them in the first place.
+
+Both camps share the same blind spot. They store information against categories and schemas that were current at write time, and neither adapts when the business underneath them shifts.
+
+## The aging ontology problem
+
+Every system of record starts accurate. The decay starts the moment you ship it.
+
+Your sales team adds a new segment. Your product ships a new pricing tier. Your compliance team layers on a regional constraint. The schema doesn't update itself. Teams start maintaining shadow systems in spreadsheets and Slack threads because the "official" record no longer matches how they work. Six months in, you have two versions of the truth: what the system says and what people do.
+
+But schema decay is only half the story. The deeper issue is semantic consensus, or rather the lack of it. Take a term like "revenue." To your finance team, revenue means recognized ARR after deductions. To your sales team, it means bookings. To your product team, it means MRR from active subscriptions. The same word points at three different numbers in three different systems, and nobody notices until an agent tries to pull "revenue" into a report and produces something that's correct from one team's perspective and wrong from another's.
+
+Ontologies and knowledge graphs that span an entire institution inherit this ambiguity at every node. An AI agent consuming that graph doesn't know which "revenue" you meant. Naive retrieval at least knows it's guessing. A structured ontology with unresolved semantic conflicts doesn't, and that false confidence produces bigger misalignments than no graph at all.
+
+Patrick Debois ([@patrickdebois](https://x.com/@patrickdebois)) captured a related angle in his [**"Context Is the New Code"**](https://www.jedi.be/blog/2026/two-weeks-after-context-is-the-new-code/) work: context artifacts rot the same way code does, and they need their own lifecycle (generate, evaluate, distribute, observe) to stay accurate. He calls this the Context Development Lifecycle. The community around that work has started using the term ["context debt"](https://medium.com/@wasowski.jarek/managing-agent-context-at-every-stage-of-the-sdlc-cdlc-sdd-cecd0d575064), a direct sibling of technical debt, to describe what accumulates when you store context but never revisit it. The aging ontology problem is context debt at the institutional level: an entire organizational knowledge structure drifting out of alignment with reality while agents keep acting on it.
+
+Bolting on new fields doesn't fix this. You need a substrate that absorbs new context without requiring a migration every quarter, and that can reconcile competing definitions of the same concept across teams. In practice, that means scoped document groups with composable set operations over them: you add context to a named scope, query across scopes by intersection, and delete-then-replace when definitions change. No monolithic schema that breaks when you add a field.
+
+## Three layers that make the brain work
+
+A company brain lives on three layers. Get any of them wrong and you're building on sand.
+
+- **Layer 1**: The business context substrate. This sits at the organizational level. Data from your CRM, your docs, your product, your customer interactions, your internal comms. Cross-functional, cross-team. You own the provenance of every piece of context at an institutional level. If you don't control this layer, nothing downstream works.
+
+- **Layer 2**: The references-inferences layer. This sits at the project level. Your operational logic at execution time: guardrails, guidelines, scoping rules, the "how we do things here" that varies by team and use case.
+
+- **Layer 3**: The reflection layer. Learnings accumulate here. Which agent runs went well. Which ones broke. Misalignments between expected and actual outcomes. Human-validated corrections from this layer feed back into layers 1 and 2. The brain doesn't self-modify unchecked; someone reviews what it learned before it changes how it operates.
+
+The pattern: your system of record isn't a centralized database anymore. It emerges from syncing the context substrate with references and reflections. SoR is a verb, not a noun.
+
+Layer 1 absorbs new context as it arrives. Layer 2 adapts the operational logic per project. Layer 3 detects when old patterns stop matching reality and flags the drift before agents act on it. Memory providers give you layer 3 without layers 1 and 2. Record providers give you the same gap from a different angle. Neither solves the aging ontology problem because neither was designed to.
+
+## How this looks in practice
+
+I run a context infrastructure company in [@getalchemyst](https://x.com/@getalchemyst). If we can't use our own product to build faster, the thesis is dead.
+
+A month ago, our GTM team closed a deployment for an education client. The client needed agents that could handle 30+ regional language variants in enrolment calls. Our GTM team uploaded the business context (call scripts, objection maps, regional pricing matrices, compliance constraints) to our context layer. That's layer 1.
+
+Our engineering team had a code cloner metaskill that had already reflected on our codebase: it understood our conventions, our separation of concerns, our API patterns. A dev pointed it at the new business context and it wrote the first pass of the integration code. No six-hour onboarding call between sales and engineering. The business context was already there. That's layers 1 and 2 working together.
+
+Then we tracked the agent's live call traces. Calls where enrolment conversion spiked became positive examples. Calls where the agent fumbled an objection became negative examples. Both fed back into the context layer.
+
+It wasn't clean from day one. Early in the deployment, one of our engineers flagged that the context layer was returning full document payloads in voice sessions where the agent only needed a three-line summary. The agent was retrieving the right context, but the format was wrong for the interface. A teammate's critique caught something the architecture couldn't: the context was correct, the consumption pattern wasn't. We scoped a voice-aware return format as a feature fix, not an architecture rewrite. That's the kind of correction that only surfaces when humans review what the system does, not whether retrieval succeeded.
+
+Two weeks later, the agent handled edge cases it had never been programmed for. That's layer 3 closing the loop.
+
+Without this feedback cycle, those positive and negative traces would have become context debt within a month: stale examples from a version of the product that no longer matched how the client's enrolment process worked. Layer 3 keeps the other two layers honest.
+
+The Plane MCP integration kept all of this synced with our project board in real time, so the dev working on iteration two started with the full history of what worked and what didn't, without asking anyone.
+
+## If you're building one
+
+Audit which layers you have. Most teams have fragments of layer 1 scattered across Notion, Google Drive, and Slack. They have no layer 2 (their agents operate without project-level guardrails). And their layer 3 is a human reviewing logs by hand.
+
+That's a filing cabinet with an AI sticker on it.
+
+The brain starts working when all three layers sync, and when someone owns the lifecycle of keeping them accurate. Context that nobody maintains is context debt accumulating in silence. The ontology ages. The agents drift. And by the time you notice, your "company brain" is confidently acting on a version of your business that no longer exists.
