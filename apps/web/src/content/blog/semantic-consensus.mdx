@@ -24,7 +24,7 @@ This is extremely useful when it's about personalization or contextual understan
 
 The current way that gives the biggest return on investment to businesses is the ontological approach, wherein you map all business relationships (as in attributes, items, and all data points) across your entire organization in the form of a graph. A graph, by nature, is very intuitive, as it has arrows to point out the relationship between entities, and on top of that, arrows you can actually visualize what sort of relationship they really have. That basically makes graphs the best choice for AI agents to operate on business data. The approach to building these graphs is called [ontology](https://www.palantir.com/platforms/ontology).
 
-This is exactly what Palantir operationalizes at scale to US governments and to all big corporations across the U.S. and beyond. They have forward-deployed engineers (or FDEs, a term that actually came up with themselves). These FDEs get embedded within the engineering teams of all of their clients and operationalize their entire operating business models, interactions and context into one organization-wide knowledge graph for Palantir's AI platform (AIP), which contains AI agents and workflows that use AI that consume the information and the connected data points on this knowledge graph itself. This forms the fundamental basis of their [layer 2](https://www.palantir.com/docs/foundry/ontology), which powers all workflows and their integrations on their proprietary Foundry/AIP platform.
+This is exactly what Palantir operationalizes at scale to US governments and to all big corporations across the U.S. and beyond. They have forward-deployed engineers (or FDEs, a term they actually coined). These FDEs get embedded within the engineering teams of all of their clients and operationalize their entire operating business models, interactions and context into one organization-wide knowledge graph for Palantir's AI platform (AIP), which contains AI agents and workflows that use AI that consume the information and the connected data points on this knowledge graph itself. This forms the fundamental basis of their [layer 2](https://www.palantir.com/docs/foundry/ontology), which powers all workflows and their integrations on their proprietary Foundry/AIP platform.
 
 These cost a lot for initial setup, but as per every client that Palantir has had, these have given them massive multipliers in their initial upfront investment. They have established Palantir as the go-to company for all sorts of data operations and business intelligence across U.S. mega-companies, as well as the U.S. government.
 
@@ -62,7 +62,7 @@ So, the biggest hurdle to actually get any value out of your business data is th
 
 Well, here you got an example wherein semantic consensus did not exist from the start, and that is arguably easier to identify and (maybe) fix. What about the bigger problem wherein the semantic consensus did exist at one point, but then there has been a drift and it does not exist anymore? Or worse, it exists partially - where in each word or each term or relationship can mean the same thing for a few teams, but not across all teams in your organization?
 
-This phenomenon is what you call Semantic Drift (also called "Context Rot"), wherein you had consensus over time and now that consensus does not exist anymore or exists partially, which is an even more subtle problem to identify but can be potentially a business killer. This mirrors exactly what data engineers in the data world, who work with structured data, call Data Drift. You and people are very well aware of how much data drift can actually kill businesses. Zillow, for example, was [almost killed due to data drift](https://governance.aicareer.pro/blog/ai-lifecycle-governance).
+This phenomenon is what you call Semantic Drift (also called "Context Rot"), wherein you had consensus over time and now that consensus does not exist anymore or exists partially, which is an even more subtle problem to identify but can be potentially a business killer. This mirrors exactly what data engineers in the data world, who work with structured data, call Data Drift. Everyone is very well aware of how serious data drift is - it can actually kill businesses - ask [**Zillow**](https://www.deeplearning.ai/the-batch/price-prediction-turns-perilous).
 
 If structured data (that can be monitored and is monitored so well in organizations) can almost kill a business as big as Zillow due to data (and consequentially AI drift) - imagine what "Semantic Drift" can cause to your organization. And ontologies, by default, are very brittle and sensitive to Semantic Drift, and can radically impact how AI agents perform.
 
@@ -75,9 +75,9 @@ Well, it's completely manual in nature. That's what an entire team of FDEs have 
 The points are clear:
 1. Ontologies store static snapshots of your operational intelligence and only augment the entities, attributes, and relationships between them. They don't enable you to question the structure and the assumptions on which these entities and relationships were created.
 2. It causes you monitoring failures, and there is little to no way to actually understand when your Semantic Drift actually starts.
-3. Semantic drift must be eliminated at the offset itself. Otherwise, it can cascade across all of your business operations.
+3. Semantic drift must be eliminated at the outset itself. Otherwise, it can cascade across all of your business operations.
 
-I have been working over this exact question for the past three years. What I have found is that agents fundamentally view the world differently from us because:
+I have been working on this exact question for the past three years. What I have found is that agents fundamentally view the world differently from us because:
 1. Agents assume the presence of semantic consensus by design, unlike us humans who can actually perceive the difference.
 2. Agents are designed to trust organizational knowledge graphs as the sole single source of truth for their entire world interpretation for task completion. Humans do not.
 3. This makes AI agents fundamentally very susceptible to Semantic drift.
@@ -86,13 +86,13 @@ In fact, I've actually touched upon the consequences [in a previous article to t
 
 ## The potential path forward
 
-This is where it really gets interesting. If even manual approaches are not trustworthy, then what is the way to go forward? This has been one of the things that has kept me up at nights.
+This is where it really gets interesting. If even manual approaches are not trustworthy, then what is the way to go forward? This has been one of the things that has kept me up at night.
 
 This is what I have seen actually works:
 
 1. Agents will be creating their own context and updating them accordingly.
 2. These contexts would be of two types:
-- References, which contains actual snippets or chunks or segments of unstructured and semi-structured data across all of your business data sources.
+- References, which contain actual snippets or chunks or segments of unstructured and semi-structured data across all of your business data sources.
 - Inferences, which will actually be inferences from across all of your references layer.
 
 Now here's where it gets interesting: inferences from the previous layer can also act as references for the next layer, like lego blocks that can be put on top of each other. What does that mean? Let's say you start with your business documents and conversation logs.
