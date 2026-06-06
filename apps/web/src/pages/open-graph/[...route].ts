@@ -1,8 +1,8 @@
+import { site } from '@/config/site';
+import { OGImageRoute } from 'astro-og-canvas';
 import { getCollection } from 'astro:content';
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
-import { OGImageRoute } from 'astro-og-canvas';
-import { site } from '@/config/site';
 
 // astro-og-canvas reads bgImage off the filesystem at build time (fs.readFile),
 // so resolve it from this module rather than the cwd — the monorepo build may
@@ -61,40 +61,45 @@ const collectionEntries = [...(await getCollection('about')), ...(await getColle
 // to { 'post.md': { title: 'Example', description: '' } }
 const pages = {
   // Default OG image for non-content routes (homepage, listings, etc.).
-  site: { title: site.title, description: site.description },
+  site: {
+    title: site.title,
+    shortTitle: site.shortTitle,
+    tagline: site.tagline,
+    description: site.description,
+  },
   ...Object.fromEntries(collectionEntries.map(({ id, data }) => [id, data])),
 };
 
-// The fields a page may expose for its OG description, in priority order.
-// All optional: any page value (the union of collection data shapes plus the
-// `site` object below) is structurally assignable to this type.
-type OgPage = {
-  title?: string;
-  tagline?: string;
-  shortTitle?: string;
-  description?: string;
-};
-
-const OG_DESCRIPTION_MAX_LENGTH = 50;
+const OG_DESCRIPTION_MAX_LENGTH = 70;
 const OG_DESCRIPTION_FALLBACK = "Well, it's (probably) a cool page. That's all I can tell you.";
 
-export const getDescriptionFromPage = (page: OgPage): string => {
+export function getDescriptionFromPage<T extends typeof collectionEntries[number]["data"]>(page: T): string {
   // Priority: tagline → short title → (truncated) description → placeholder.
   if (page.tagline) {
     return page.tagline;
   }
 
-  if (page.shortTitle) {
-    return page.shortTitle;
-  }
-
-  if (page.description) {
+  // `vibe` pages have no `description` field, so confirm it exists and is a
+  // non-empty string before using it.
+  if ('description' in page && typeof page.description === 'string' && page.description.length > 0) {
     return page.description.length > OG_DESCRIPTION_MAX_LENGTH
       ? `${page.description.slice(0, OG_DESCRIPTION_MAX_LENGTH)}...`
       : page.description;
   }
 
   return OG_DESCRIPTION_FALLBACK;
+}
+
+export function getTitleFromPage<T extends typeof collectionEntries[number]["data"]>(page: T): string {
+  if (page.shortTitle) {
+    return page.shortTitle;
+  }
+
+  if (page.title) {
+    return page.title;
+  }
+
+  return "Untitled Page"
 }
 
 export const { getStaticPaths, GET } = await OGImageRoute({
@@ -105,14 +110,13 @@ export const { getStaticPaths, GET } = await OGImageRoute({
   pages: pages,
 
   getImageOptions: (path, page) => ({
-    title: page.title ?? 'Untitled',
-
+    title: getTitleFromPage<typeof page>(page),
     bgImage: {
       path: avatarPath,
       fit: 'fill',
       position: 'center',
     },
     padding: imagePadding,
-    description: getDescriptionFromPage(page),
+    description: getDescriptionFromPage<typeof page>(page),
   }),
 });
