@@ -1,8 +1,8 @@
-import { site } from '@/config/site';
-import { OGImageRoute } from 'astro-og-canvas';
 import { getCollection } from 'astro:content';
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
+import { OGImageRoute } from 'astro-og-canvas';
+import { site } from '@/config/site';
 
 // astro-og-canvas reads bgImage off the filesystem at build time (fs.readFile),
 // so resolve it from this module rather than the cwd — the monorepo build may
@@ -65,6 +65,38 @@ const pages = {
   ...Object.fromEntries(collectionEntries.map(({ id, data }) => [id, data])),
 };
 
+// The fields a page may expose for its OG description, in priority order.
+// All optional: any page value (the union of collection data shapes plus the
+// `site` object below) is structurally assignable to this type.
+type OgPage = {
+  title?: string;
+  tagline?: string;
+  shortTitle?: string;
+  description?: string;
+};
+
+const OG_DESCRIPTION_MAX_LENGTH = 50;
+const OG_DESCRIPTION_FALLBACK = "Well, it's (probably) a cool page. That's all I can tell you.";
+
+export const getDescriptionFromPage = (page: OgPage): string => {
+  // Priority: tagline → short title → (truncated) description → placeholder.
+  if (page.tagline) {
+    return page.tagline;
+  }
+
+  if (page.shortTitle) {
+    return page.shortTitle;
+  }
+
+  if (page.description) {
+    return page.description.length > OG_DESCRIPTION_MAX_LENGTH
+      ? `${page.description.slice(0, OG_DESCRIPTION_MAX_LENGTH)}...`
+      : page.description;
+  }
+
+  return OG_DESCRIPTION_FALLBACK;
+}
+
 export const { getStaticPaths, GET } = await OGImageRoute({
   // Tell us the name of your dynamic route segment.
   // In this case it’s `route`, because the file is named `[...route].ts`.
@@ -81,6 +113,6 @@ export const { getStaticPaths, GET } = await OGImageRoute({
       position: 'center',
     },
     padding: imagePadding,
-    description: 'description' in page ? (page.description.length > 50? `${page.description.slice(0,50)}...` : page.description) : 'Well, it\'s (probably) a cool page. That\'s all I can tell you.',
+    description: getDescriptionFromPage(page),
   }),
 });
