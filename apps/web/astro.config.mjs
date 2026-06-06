@@ -8,7 +8,9 @@ import { pluginLineNumbers } from "@expressive-code/plugin-line-numbers"
 import tailwindcss from "@tailwindcss/vite"
 import expressiveCode from "astro-expressive-code"
 import llms from "astro-llms-md"
+import mermaid from 'astro-mermaid'
 import { defineConfig } from "astro/config"
+
 
 // https://astro.build/config
 export default defineConfig({
@@ -38,10 +40,14 @@ export default defineConfig({
         showLineNumbers: false,
       },
     }),
+    mermaid({
+      theme: 'neutral',
+      autoTheme: true
+    }),
     mdx(),
     react(),
     sitemap(),
-    llms()
+    llms(),
   ],
   // Preserve SEO from the legacy static site's sitemap by 301-ing old URLs.
   redirects: {

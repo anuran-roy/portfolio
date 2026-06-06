@@ -81,6 +81,6 @@ export const { getStaticPaths, GET } = await OGImageRoute({
       position: 'center',
     },
     padding: imagePadding,
-    description: 'description' in page ? page.description : 'Well, it\'s (probably) a cool page. That\'s all I can tell you.',
+    description: 'description' in page ? (page.description.length > 50? `${page.description.slice(0,50)}...` : page.description) : 'Well, it\'s (probably) a cool page. That\'s all I can tell you.',
   }),
 });
