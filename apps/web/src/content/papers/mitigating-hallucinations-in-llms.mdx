@@ -1,0 +1,16 @@
+---
+title: "Mitigating Hallucinations in LLMs"
+description: "Mitigating Hallucinations in LLMs Using Sieve of Fallacies and Truths: A Game Theoretic Perspective"
+order: 2
+tags: ["Deep Learning", "Hallucinations", "Game Theory", "Large Language Models", "Context Engineering"]
+links:
+  - { label: "Springer", href: "https://link.springer.com/chapter/10.1007/978-3-031-76710-4_6"}
+---
+Large Language Models (LLM) promise to bridge the gap between computers and humans like never before. But just like humans, they are prone to errors or delusions, which we formally call hallucinations.
+
+LLM can hallucinate or generate false information when prompted for text completion. LLM may confidently fabricate statements and details that appear convincing but could be incorrect. This affects the readability of the text.
+
+One of the most widely used mechanisms to reduce hallucinations is Retrieval Augmented Generation (RAG). RAG enhances text generation systems by retrieving and incorporating external knowledge. It matches the current context to relevant passages from a knowledge source and conditions the model for integrating facts and entities from retrieved documents. This grounds the generated text in external information rather than hallucinations.
+
+In this chapter, we discuss a novel game theory-based approach that can help ingrain distilled facts inside them so that they are “attuned” toward giving facts as outputs. We do so by operating on the internal representations of words and, by extension, the input context for LLMs.
+
