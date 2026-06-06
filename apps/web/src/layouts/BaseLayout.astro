@@ -1,7 +1,7 @@
 ---
 import "@workspace/ui/globals.css"
-import TopNav from "@/components/TopNav.astro"
 import Footer from "@/components/Footer.astro"
+import TopNav from "@/components/TopNav.astro"
 import { site } from "@/config/site"
 
 interface Props {
@@ -33,7 +33,7 @@ const ogImage = new URL(image ?? "/open-graph/site.png", Astro.site).toString()
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <link
       rel="alternate"
