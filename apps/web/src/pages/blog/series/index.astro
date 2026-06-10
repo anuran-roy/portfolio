@@ -1,0 +1,26 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro"
+import { collectSeries, getBlogPosts, slugify } from "@/lib/content"
+
+const posts = await getBlogPosts()
+const seriesList = collectSeries(posts)
+---
+
+<BaseLayout title="Series" width="narrow">
+  <h1 class="mb-6 font-heading text-3xl font-bold tracking-tight">Series</h1>
+  <ul class="space-y-2">
+    {
+      seriesList.map(({ series, count }) => (
+        <li>
+          <a
+            href={`/blog/series/${slugify(series)}`}
+            class="flex items-center justify-between border border-border px-4 py-3 transition-colors hover:border-foreground/30"
+          >
+            <span class="font-mono uppercase tracking-wide">{series}</span>
+            <span class="text-sm text-muted-foreground">{count}</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</BaseLayout>

@@ -1,0 +1,504 @@
+---
+title: "To self-host or not to self-host?"
+tagline: "Introducing ARISE: A self-hosting heuristic for early-stage technical founders"
+description: "Startup credits for infrastructure are a lifesaver, but only if it does not entail endless maintenance. How do you decide, as an early-stage technical founder, what to host and what not to host?"
+date: 2026-01-19
+author: "Anuran Roy"
+tags: ["self-hosting", "cost management", "budgeting", "startups"]
+categories: ["blog"]
+series: "Diary of a CTO"
+comments: true
+---
+
+Startup credits are not really what you think, and this might not sit well with a lot of people. But let me explain how self-hosting can be a better way, and how to optimize your costs from first principles while doing so.
+
+As a technical founder/co-founder, the first few months of your startup is all about talking to customers, finding potential pain points to solve, and then creating an MVE for them (Minimum Viable Experience - the age of MVPs is dead, read more here) - in that order. Most platforms are more than happy to give a significant amount of startup credits (infact we do too!)
+
+We don't want to spread ourselves too thin, XYZ platform is such a godsend!
+
+^^ That's the most common testimonial (or undisclosed ad?) we see on TL, innit?
+
+But that honeymoon phase ends soon. Then the reality hits: most platforms give these startup credits as a honey-trap. The loop goes like this:
+
+You get a lot of credits -> You build a lot on these platforms -> You get locked in -> Credits expire -> You:
+
+<center><img src="/images/arise-blog/ah-shit-here-we-go-again.png" alt="Ah shit, here we go again..." /></center>
+
+That was me when ALL (I kid you not, **ALL**) our startup credits expired in a span of one unkind week.
+
+Meanwhile on the other end: You hear your Co-founder/CEO/CFO shouting:
+
+> **"EXCUSE ME?!"**
+
+<center><img src="/images/arise-blog/excuse-me.png" alt="WHAT THE..." /></center>
+
+That's the expression my co-founder [@Uttaranxnayak](x.com/uttaranxnayak) hits me with when he sees some unholy number of $$ going somewhere.
+
+And that's where it hits you:
+
+> *"I should've seen the pricing page, dammit!"*
+
+## To self-host or not to self-host?
+
+That's why I'm writing this article - maybe you'll find it relatable as well.
+
+If your tech stack is something more than a Next.js app, most of y'all already will be relying on (but hopefully not fully locked-in to) a cloud provider (think AWS, GCP, Azure, etc.) once you start serving customers and moving to real revenue. And once the startup credits run out, the endless tug-of-war between increasing capabilities and cost-cutting starts.
+
+But the problem is (almost) never cloud as a whole. For an early-stage founder, it's most likely the last thing you want to switch over. Unless you're working with **EXTREMELY sensitive data** and require tons of compliances at every step of the way, keeping a cloud provider is probably a good option.
+
+It's all the tools your team uses that's **NOT directly in your cloud**. Invisible cost sinks that can paralyze the daily operations if not noticed beforehand.
+
+- The Documentation workspace that charged you by seats?
+- The task management platform that ran out of free users and suddenly adds 20% to your monthly technical spend budgets?
+
+Yes, those are the ones.
+
+## An Example - Our Own Budget Costs
+
+Back in December 2024, just fresh off our Pre-seed round, we applied for a lot of startup credits - cloud, documentation, task management software - you name it.
+
+A few weeks into December - 15 iterations done, revenue starting to flow, things starting to look good. We got our first positive MIS report. Next week:
+
+> "Anuran, WTF - we just got billed **$5k** this month for tech?!"
+
+<blockquote>
+ "Hey, I am locked out of the company documentation - what's happening?"
+
+&gt; Checks subscription - expired.<br />
+&gt; Sees how to reactivate it? *"Pay $2k per month"*<br />
+&gt; **FUUUUUUU....**
+</blockquote>
+
+The total bill = ~**$8k/month**.
+
+<center><img src="/images/arise-blog/me-calculating-monthly-spend-that-week.png" alt="Me calculating the monthly spend that week." /></center>
+
+(Me calculating the monthly spend that week.)
+
+That was the worst week in my second-half of 2025 - BY FAR. Startup ops paused without it. We had to rethink. What now?
+
+No more oversight.
+
+It was not a problem anymore - it was an emergency. We reluctantly paid - to get one month of access. Over the next 3 days:
+
+- Backed up all our data in GCS (thanks Google Cloud) - took us 2 days.
+- Started setting up self-hosted equivalents of most (now almost all) subscriptions that passed the **"ARISE"** criteria.
+
+Took us more than a month - but by January 15th, we're almost done.
+
+## What's the ARISE Criteria?
+
+I'm a big fan of acronyms, but not the corpo lingo that their full forms entail. So I made up one myself: **"ARISE"** - Alright, Run Infra (or) Subscribe (to) Everything?
+
+The rule of thumb is pretty comprehensive but intuitive:
+
+1. Find out the costs of all components, and normalize them on a scale of 0–100. (Highest cost = 100)
+2. Assign an **impact score** based on how much of the team's total weekly (if not daily) bandwidth goes into that particular tool and the **RoI** derived out of it.
+3. Calculate **RoI** by seeing how much of it goes into actually doing business vs. internal workflows.
+4. Factor in maintenance bandwidth costs for self-hosting.
+5. Consider feature gaps and their impact.
+6. Multiply the scores, sort in descending order, and self-host the ones above the median if self-hosting cost is lower.
+
+## Example Scenario (Generated with Claude)
+Well, so I asked Claude to generate an example out of it, and it captured the idea perfectly.
+
+<center><img src="/images/arise-blog/ask-ai-to-write-assignment.png" alt="(Well, I'm not lazy, I'm just in power-saving mode." /></center>
+
+(Well, I'm not lazy, I'm just in power-saving mode.)
+
+Here's the sample scenario:
+
+- **Team Size:** 25 people
+- **Total Monthly Software Cost:** $10,000
+- **Work Week:** 50 hours
+
+**Self-Hosting Base Infrastructure:** $400/month
+**DevOps Resource:** 1 person (from existing team)
+
+### Complete ARISE Analysis
+
+#### 1. Communication Suite (Slack Premium → Mattermost)
+
+##### Current State
+
+- Monthly Cost: $2,000
+- Normalized Cost Score: 100
+- Team Usage: 25/25 (100%)
+- Daily Bandwidth: 4 hours
+- Bandwidth Impact: 4.0
+
+##### Self-Hosting Assessment
+
+- Alternative: Mattermost
+- Hosting Cost: $80/month
+- Maintenance: 6 hours/week
+- Maintenance Bandwidth: 0.048
+- Normalized Hosting Cost: 4.0
+
+##### Feature Gap
+
+- Missing: Some integrations, threading UX polish, enterprise search
+- Coverage: 75% of features available
+- Workaround Time: 1 hour/day
+- Feature Gap Impact: 0.25
+
+**ARISE Delta:** 299.808 ✅
+
+##### Calculation
+
+```
+(100 * 4.0 * 1.0) - (0.048 * 4.0) - (400 * 0.25)
+= 400 - 0.192 - 100
+= 299.808
+```
+
+**Monthly Savings:** $1,920
+
+#### 2. Project Management & Docs (Linear + Notion → Plane + Outline)
+
+##### Current State
+
+- Monthly Cost: $1,500
+- Normalized Cost Score: 75
+- Team Usage: 25/25 (100%)
+- Daily Bandwidth: 3 hours
+- Bandwidth Impact: 3.0
+
+##### Self-Hosting Assessment
+
+- Alternative: Plane + Outline
+- Hosting Cost: $50/month
+- Maintenance: 4 hours/week
+- Maintenance Bandwidth: 0.032
+- Normalized Hosting Cost: 2.5
+
+##### Feature Gap
+
+- Missing: Real-time collaboration polish, AI features, some integrations
+- Coverage: 85% of features available
+- Workaround Time: 0.5 hours/day
+- Feature Gap Impact: 0.075
+
+**ARISE Delta:** 208.045 ✅
+
+##### Calculation
+
+```
+(75 * 3.0 * 1.0) - (0.032 * 2.5) - (225 * 0.075)
+= 225 - 0.08 - 16.875
+= 208.045
+```
+
+**Monthly Savings:** $1,450
+
+#### 3. Customer Support (Zendesk → Chatwoot)
+
+##### Current State
+
+- Monthly Cost: $1,200
+- Normalized Cost Score: 60
+- Team Usage: 8/25 (32%)
+- Daily Bandwidth: 5 hours
+- Bandwidth Impact: 5.0
+
+##### Self-Hosting Assessment
+
+- Alternative: Chatwoot
+- Hosting Cost: $40/month
+- Maintenance: 3 hours/week
+- Maintenance Bandwidth: 0.024
+- Normalized Hosting Cost: 2.0
+
+##### Feature Gap
+
+- Missing: Advanced automation, some integrations, advanced reporting
+- Coverage: 80% of features available
+- Workaround Time: 0.75 hours/day
+- Feature Gap Impact: 0.15
+
+**ARISE Delta:** 81.552 ✅
+
+##### Calculation
+
+```
+(60 * 5.0 * 0.32) - (0.024 * 2.0) - (96 * 0.15)
+= 96 - 0.048 - 14.4
+= 81.552
+```
+
+**Monthly Savings:** $1,160
+
+#### 4. Email & Calendar (Google Workspace → Mailcow + Nextcloud)
+
+##### Current State
+
+- Monthly Cost: $500
+- Normalized Cost Score: 25
+- Team Usage: 25/25 (100%)
+- Daily Bandwidth: 2 hours
+- Bandwidth Impact: 2.0
+
+##### Self-Hosting Assessment
+
+- Alternative: Mailcow + Nextcloud
+- Hosting Cost: $70/month
+- Maintenance: 7 hours/week (email is critical)
+- Maintenance Bandwidth: 0.056
+- Normalized Hosting Cost: 3.5
+
+##### Feature Gap
+
+- Missing: Spam filtering quality, mobile app polish, reliability SLA
+- Coverage: 75% of features available
+- Workaround Time: 0.8 hours/day
+- Feature Gap Impact: 0.2
+
+**ARISE Delta:** 39.804 ✅
+
+##### Calculation
+
+```
+(25 * 2.0 * 1.0) - (0.056 * 3.5) - (50 * 0.2)
+= 50 - 0.196 - 10
+= 39.804
+```
+
+**Monthly Savings:** $430
+
+#### 5. CRM & Sales (HubSpot Starter → SuiteCRM)
+
+##### Current State
+
+- Monthly Cost: $600
+- Normalized Cost Score: 30
+- Team Usage: 7/25 (28%)
+- Daily Bandwidth: 3 hours
+- Bandwidth Impact: 3.0
+
+##### Self-Hosting Assessment
+
+- Alternative: SuiteCRM
+- Hosting Cost: $35/month
+- Maintenance: 4 hours/week
+- Maintenance Bandwidth: 0.032
+- Normalized Hosting Cost: 1.75
+
+##### Feature Gap
+
+- Missing: Email sequences, marketing automation, modern UX
+- Coverage: 70% of features available
+- Workaround Time: 1 hour/day
+- Feature Gap Impact: 0.3
+
+**ARISE Delta:** 17.584 🟡
+
+##### Calculation
+
+```
+(30 * 3.0 * 0.28) - (0.032 * 1.75) - (25.2 * 0.3)
+= 25.2 - 0.056 - 7.56
+= 17.584
+```
+
+Status: Borderline - Evaluate based on sales team tolerance for UX gaps
+
+#### 6. Analytics & Monitoring (Mixpanel + Datadog → Plausible + Prometheus + Grafana)
+
+##### Current State
+
+- Monthly Cost: $800
+- Normalized Cost Score: 40
+- Team Usage: 10/25 (40%)
+- Daily Bandwidth: 1 hour
+- Bandwidth Impact: 1.0
+
+##### Self-Hosting Assessment
+
+- Alternative: Plausible + Prometheus + Grafana
+- Hosting Cost: $60/month
+- Maintenance: 5 hours/week
+- Maintenance Bandwidth: 0.04
+- Normalized Hosting Cost: 3.0
+
+##### Feature Gap
+
+- Missing: Some advanced funnels, alert sophistication
+- Coverage: 85% of features available
+- Workaround Time: 0.3 hours/day
+- Feature Gap Impact: 0.045
+
+**ARISE Delta:** 15.16 🟡
+
+##### Calculation
+
+```
+(40 * 1.0 * 0.4) - (0.04 * 3.0) - (16 * 0.045)
+= 16 - 0.12 - 0.72
+= 15.16
+```
+
+Status: Borderline - Depends on data volume growth trajectory
+
+#### 7. Password Manager (1Password → Vaultwarden)
+
+##### Current State
+
+- Monthly Cost: $300
+- Normalized Cost Score: 15
+- Team Usage: 25/25 (100%)
+- Daily Bandwidth: 0.25 hours
+- Bandwidth Impact: 0.25
+
+##### Self-Hosting Assessment
+
+- Alternative: Vaultwarden (Bitwarden)
+- Hosting Cost: $20/month
+- Maintenance: 2 hours/week
+- Maintenance Bandwidth: 0.016
+- Normalized Hosting Cost: 1.0
+
+##### Feature Gap
+
+- Missing: Travel mode, advanced admin controls
+- Coverage: 95% of features available
+- Workaround Time: 0.05 hours/day
+- Feature Gap Impact: 0.0025
+
+**ARISE Delta:** 3.725 ❌
+
+##### Calculation
+
+```
+(15 * 0.25 * 1.0) - (0.016 * 1.0) - (3.75 * 0.0025)
+= 3.75 - 0.016 - 0.009375
+= 3.725
+```
+
+Recommendation: Keep subscription - Security-critical, minimal savings
+
+#### 8. Code Repository (GitHub → GitLab CE)
+
+##### Current State
+
+- Monthly Cost: $400
+- Normalized Cost Score: 20
+- Team Usage: 8/25 (32%)
+- Daily Bandwidth: 0.5 hours
+- Bandwidth Impact: 0.5
+
+##### Self-Hosting Assessment
+
+- Alternative: GitLab CE + Runners
+- Hosting Cost: $90/month (CI/CD compute-heavy)
+- Maintenance: 6 hours/week
+- Maintenance Bandwidth: 0.048
+- Normalized Hosting Cost: 4.5
+
+##### Feature Gap
+
+- Missing: GitHub Actions marketplace, Dependabot, Copilot integration
+- Coverage: 90% of features available
+- Workaround Time: 0.2 hours/day
+- Feature Gap Impact: 0.02
+
+**ARISE Delta:** 2.92 ❌
+
+##### Calculation
+
+```
+(20 * 0.5 * 0.32) - (0.048 * 4.5) - (3.2 * 0.02)
+= 3.2 - 0.216 - 0.064
+= 2.92
+```
+
+Recommendation: Keep subscription - Developer experience premium worth cost
+
+#### 9. Cloud Infrastructure (AWS → Bare Metal)
+
+##### Current State
+
+- Monthly Cost: $1,800
+- Normalized Cost Score: 90
+- Team Usage: 5/25 (20%)
+- Daily Bandwidth: 1.5 hours
+- Bandwidth Impact: 1.5
+
+##### Self-Hosting Assessment
+
+- Alternative: Dedicated servers
+- Hosting Cost: $1,200/month
+- Maintenance: 8 hours/week
+- Maintenance Bandwidth: 0.064
+- Normalized Hosting Cost: 60
+
+##### Feature Gap
+
+- Missing: Managed services, auto-scaling, global CDN
+- Coverage: 60% of managed features needed
+- Workaround Time: 2 hours/day
+- Feature Gap Impact: 0.8
+
+**ARISE Delta:** 1.56 ❌
+
+##### Calculation
+
+```
+(90 * 1.5 * 0.2) - (0.064 * 60) - (27 * 0.8)
+= 27 - 3.84 - 21.6
+= 1.56
+```
+
+Recommendation: Keep subscription - Managed services essential for product velocity
+
+#### 10. Design Tools (Figma → Penpot)
+
+##### Current State
+
+- Monthly Cost: $900
+- Normalized Cost Score: 45
+- Team Usage: 6/25 (24%)
+- Daily Bandwidth: 6 hours
+- Bandwidth Impact: 6.0
+
+##### Self-Hosting Assessment
+
+- Alternative: Penpot
+- Hosting Cost: $30/month
+- Maintenance: 2 hours/week
+- Maintenance Bandwidth: 0.016
+- Normalized Hosting Cost: 1.5
+
+##### Feature Gap
+
+- Missing: Plugins, advanced prototyping, FigJam, dev handoff quality
+- Coverage: 50% of features available (significant gaps)
+- Workaround Time: 2.5 hours/day
+- Feature Gap Impact: 1.25
+
+**ARISE Delta:** -16.224 ❌
+
+##### Calculation
+
+```
+(45 * 6.0 * 0.24) - (0.016 * 1.5) - (64.8 * 1.25)
+= 64.8 - 0.024 - 81
+= -16.224
+```
+
+Recommendation: Keep subscription - Feature gaps would reduce designer productivity by 40%
+
+**Median **ARISE Delta:** 16.372**
+
+[In hindsight, that's common sense, but you won't believe how few people actually do this!]
+
+## How our current setup looks like
+
+We followed this procedure, and moved to self-hosting stuff on our GCP infra - $6k of monthly costs became ~$3k, now well on its way to $2k.
+
+What we self-host: Newsletter Manager, N8N, project management system, internal documentation management, our main product, etc.
+
+What we don't self-host: Comms, Emailing infrastructure, designing software, LLM APIs.
+
+## Conclusion
+
+Now that you've reached the end of the article - congratulations! You've successfully read through the most boring article I've ever written! Give yourself a pat in the back, and maybe comment if this helped you?

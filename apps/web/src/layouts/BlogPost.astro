@@ -10,6 +10,7 @@ import {
   type BlogPost as BlogPostEntry,
   formatDate,
   readingTimeOf,
+  slugify,
 } from "@/lib/content"
 
 interface Props {
@@ -46,7 +47,7 @@ const markdownUrl = `/blog/${post.id}.md`
               <>
                 <span aria-hidden="true">·</span>
                 <a
-                  href={`/blog/series/${series.toLowerCase()}`}
+                  href={`/blog/series/${slugify(series)}`}
                   class="font-mono hover:text-foreground"
                 >
                   {series} series

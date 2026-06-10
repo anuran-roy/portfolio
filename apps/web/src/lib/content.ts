@@ -86,6 +86,22 @@ export function collectCategories(
     .sort((a, b) => b.count - a.count || a.category.localeCompare(b.category))
 }
 
+/** Unique, sorted series list with counts across all posts. */
+export function collectSeries(
+  posts: BlogPost[]
+): { series: string; count: number }[] {
+  const counts = new Map<string, number>()
+  for (const post of posts) {
+    const series = post.data.series
+    if (series) {
+      counts.set(series, (counts.get(series) ?? 0) + 1)
+    }
+  }
+  return [...counts.entries()]
+    .map(([series, count]) => ({ series, count }))
+    .sort((a, b) => b.count - a.count || a.series.localeCompare(b.series))
+}
+
 /** Up to `limit` posts related to `post` by shared series or tags. */
 export function relatedPosts(
   post: BlogPost,
