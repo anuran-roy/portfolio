@@ -9,94 +9,458 @@ links:
   - { label: "Github", href: "https://github.com/anuran-roy/langtache" }
   - {label: "Peerlist", href: "https://peerlist.io/anuranroy02224/project/langtache"}
 ---
-A quick way to offramp from LangChain.
+## Yet another framework?
 
-Drop in replacements for popular LangChain types, without the OOP hell.
+Precisely **NO** - the exact opposite, rather. I built LangTache because most LLM workflows are just templating - and LangChain made that simple thing needlessly complex. So I made LangTache with drop-in Mustache templates, Zod-validated structured output, direct OpenAI SDK calls. No abstraction layers you didn't ask for.
 
-## Why this?
+## Installation
 
-Well, LangChain is...not frankly what I would like to use anymore, something that I never thought I would do when I first tried it out in early 2023.
+```bash
+# npm
+npm i @anuran-roy/langtache
 
-Turns out, many other are facing the same situation, so I just decided to put up this small package.
+# Bun
+bun add @anuran-roy/langtache
+```
 
-Also, from most use cases that I have seen (as per my limited knowledge), they involve just plain templating that could've been done with a templating language already. This project is a step in that direction, to reduce the OOP madness.
 
-## Examples
-### Example 1: Simple "Hello, world!" implementation
+## Why I built LangTache
 
-```typescript helloLangtache.ts
+I loved LangChain when I first picked it up in early 2023. But the more production code I wrote with it, the more I felt like I was fighting the framework rather than building with it. LangTache is my attempt to fix that - to reduce the whole thing back to what it actually is at its core: templating.
+
+Most LLM workflows I've encountered - across dozens of real production systems - reduce to filling a few variables into a prompt string and calling an API. LangChain wraps that trivial operation in layers of OOP: prompt template classes, output parser classes, chain classes, LCEL pipe operators. Each layer adds cognitive overhead, debugging surface area, and upgrade risk, without adding meaningful value. A templating language like Mustache already solves the actual problem. LangTache is the library I wished existed.
+
+## How so?
+
+The side-by-side below makes the problem concrete. Both snippets do the same thing - translate a string using an LLM. The LangChain version requires three separate class imports, three instantiations, and a custom pipe operator just to get there. With LangTache, it's one template, one `.pipe()`, one `.invoke()`.
+
+**See for yourself:**
+
+### LangChain - Three unnecessary abstractions
+
+```typescript
+import { ChatOpenAI } from 'langchain_openai';
+import { StrOutputParser } from 'langchain_core/output_parsers';
+import { ChatPromptTemplate } from 'langchain_core/prompts';
+
+const model = new ChatOpenAI({ model: "gpt-4o" });
+const parser = new StrOutputParser();
+
+const promptTemplate = ChatPromptTemplate.fromMessages([
+  ["system", "You are an expert translator"],
+  ["user", "Translate from English into {language}"],
+  ["user", "{text}"]
+]);
+
+// Three classes, four function calls, LCEL pipe syntax
+const chain = promptTemplate | model | parser;
+const result = chain.invoke({ language: "Italian", text: "hello!" });
+```
+
+### LangTache - One template, one call
+
+```typescript
 import { OpenAI } from 'openai';
-import { ChatPromptTemplate, getStructuredOutput } from '../src';
+import { ChatPromptTemplate } from '@anuran-roy/langtache';
 
-const chatClient = new OpenAI();
+const client = new OpenAI();
+const prompt = new ChatPromptTemplate({
+  template: `Translate "{{text}}" from English into {{language}}.`,
+  inputVariables: ["text", "language"],
+  templateFormat: 'mustache'
+});
+
+// One class, one pipe, one invoke - done.
+const chain = prompt.pipe(client);
+const result = await chain.invoke('gpt-4o', {
+  text: "hello!", language: "Italian"
+});
+```
+
+## What I built into LangTache
+
+I designed LangTache to cover the 80% of LLM use cases that don't need a full framework - and to stay completely out of your way for the other 20%.
+
+| Feature | Description |
+|---|---|
+| **Mustache Templating** | No custom DSL to learn - just Mustache. |
+| **Chainable API** | Attach an AI client with `.pipe()` and call `.invoke(model, params)`. Model selection happens at runtime, enabling easy multi-agent handoffs. |
+| **Zod-Powered Structured Output** | Define your output schema with Zod, pass it to `getStructuredOutput()`, and get a type-safe prompt that instructs the LLM to return valid JSON. |
+| **Robust JSON Parsing** | Handle LLM responses gracefully - stripping markdown fences, handling partial JSON, and recovering from malformed output. |
+| **Output Validation** | Parse and validate LLM responses against your Zod schema - with a clean escape hatch on error. |
+| **Auto Variable Extraction** | Automatically extract Mustache variables from a template string - no need to list them manually. |
+| **Minimal Footprint** | Only 8 direct dependencies. The entire source is under 300 lines of TypeScript. |
+
+## Code Examples
+
+These examples are drawn directly from the repository. I've annotated each one to explain the design decisions behind the API - not just what it does, but why it works the way it does.
+
+### Example 1 - Simple Chat ("Hello, World!")
+
+**Tags:** `ChatPromptTemplate` · `.pipe()` · `.invoke()`
+
+This is the hello-world of LangTache. I deliberately made the model a runtime argument rather than a constructor argument - that single decision is what makes it trivial to swap models mid-chain or route to different providers in a multi-agent setup without touching the template definition.
+
+```typescript
+// hello-world.ts
+import { OpenAI } from 'openai';
+import { ChatPromptTemplate } from '@anuran-roy/langtache';
+
+const chatClient = new OpenAI(); // Uses OPENAI_API_KEY from environment
+
+// 1. Define a Mustache template with named input variables
 const chatPrompt = new ChatPromptTemplate({
   template: `Hello there, my name is {{name}}`,
   inputVariables: ["name"],
   templateFormat: 'mustache' // Currently only mustache is supported
-})
+});
 
+// 2. Pipe the template to an OpenAI client - creates a chainable object
 const chatPromptChain = chatPrompt.pipe(chatClient);
 
+// 3. Invoke with model name (chosen at runtime!) and variable values
 const chatPromptResult = await chatPromptChain.invoke(
-  'gpt-5-nano', // Invoke model during runtime - enables easy handoffs and orchestration in multi-agent systems.
+  'gpt-4o', // Model is specified here - easy to swap for multi-agent handoffs
   {
     "name": "Anuran"
-  });
+  }
+);
 
-console.log(chatPromptResult.choices[0]?.message?.content?.toString() ?? 'No response content')
+// 4. Access the raw OpenAI response object directly - no hidden parsers
+console.log(
+  chatPromptResult.choices[0]?.message?.content?.toString() ?? 'No response content'
+);
 ```
 
-## Example 2: Structured output
-```typescript structuredOutputLangtache.ts
+### Example 2 - Structured Output with Zod Schema
+
+**Tags:** `getStructuredOutput` · `getValidatedOutput` · `Zod`
+
+Structured output is where most frameworks get overly clever. My approach: define the shape with Zod (which you're probably already using), let `getStructuredOutput()` embed the JSON Schema into the prompt, and use `getValidatedOutput()` to parse and type-check the response. The output is always typed as `z.infer<typeof schema>` - no casting, no `any`.
+
+```typescript
+// structured-output.ts
 import { OpenAI } from 'openai';
 import z from 'zod';
-import { ChatPromptTemplate, getStructuredOutput, getValidatedOutput } from '@anuran-roy/langtache';
+import {
+  ChatPromptTemplate,
+  getStructuredOutput,
+  getValidatedOutput
+} from '@anuran-roy/langtache';
 
 const chatClient = new OpenAI();
+
+// 1. Define the prompt template
 const chatPromptStructuredOutput = new ChatPromptTemplate({
-  template: `Given the user's Linkedin bio, return their name, role and company name in a JSON format. The data is:
+  template: `Given the user's LinkedIn bio, return their name, role and
+  company name in a JSON format. The data is:
   \`\`\`
   {{bio}}
   \`\`\``,
   inputVariables: ["bio"],
-  templateFormat: 'mustache' // Currently only mustache is supported
+  templateFormat: 'mustache'
 });
 
+// 2. Define the expected output shape using Zod
 const structuredOutputSchema = z.object({
   "name": z.string(),
   "company": z.string(),
   "role": z.string()
 });
 
+// 3. getStructuredOutput() returns a function that wraps your formatted
+//    prompt in a JSON Schema instruction - telling the LLM exactly what
+//    structure to return.
 const structuredOutputGenerator = getStructuredOutput(structuredOutputSchema);
+
 const input = {
   "bio": "Hey there, I am Anuran. I am the co-founder and CTO at Alchemyst AI."
-}
+};
 
-const chatPromptStructedOutput = chatPromptStructuredOutput.format(input);
+// 4. First format the template, then wrap it with the schema instruction
+const formattedPrompt = chatPromptStructuredOutput.format(input);
+const finalPrompt = structuredOutputGenerator(formattedPrompt);
 
-const finalPrompt = structuredOutputGenerator(chatPromptStructedOutput);
+// 5. Call the LLM directly - no hidden wrappers
+const result = await chatClient.chat.completions.create({
+  messages: [{ "content": finalPrompt, role: "user" }],
+  model: "gpt-4o"
+});
 
-const chatPromptStructuredOutputResult = await chatClient.chat.completions.create({
-  messages: [
-    {
-      "content": finalPrompt,
-      role: "user"
-    }
-  ],
-  model: "gpt-5-nano"
-})
+const receivedResponse =
+  result.choices[0]?.message?.content?.toString() ?? 'No response content';
 
-const receivedResponse = chatPromptStructuredOutputResult.choices[0]?.message?.content?.toString() ?? 'No response content'
-console.log(receivedResponse)
+// 6. Validate and parse the response against the Zod schema
+const validatedOutput = getValidatedOutput(structuredOutputSchema, receivedResponse);
 
-// Now validate it
-
-const validatedOutput = getValidatedOutput(structuredOutputSchema, receivedResponse)
-
-if (validatedOutput.error) { // Escape hatch in case of error
-  console.error(validatedOutput.error)
-} else if (validatedOutput.data) { // If LLM response is good.
-  console.info(validatedOutput.data) // Ensures that the output type is always of type z.infer<typeof structuredOutputSchema>;
+if (validatedOutput.error) {
+  // Escape hatch: the LLM returned something that doesn't match the schema
+  console.error(validatedOutput.error);
+} else if (validatedOutput.data) {
+  // Success: output is fully typed as { name: string, company: string, role: string }
+  console.info(validatedOutput.data);
+  // → { name: "Anuran", company: "Alchemyst AI", role: "Co-founder and CTO" }
 }
 ```
+
+### Example 3 - Auto Variable Extraction with `fromTemplate()`
+
+**Tags:** `fromTemplate` · `Static Factory`
+
+I added `fromTemplate()` because manually listing `inputVariables` is just noise - the variables are already right there in the template string. This static factory scans for all `{{variable}}` tokens using a regex and wires them up automatically. Pass a generic type parameter and you get full TypeScript inference on the input object.
+
+```typescript
+// from-template.ts
+import { OpenAI } from 'openai';
+import { ChatPromptTemplate } from '@anuran-roy/langtache';
+
+const client = new OpenAI();
+
+// fromTemplate() auto-extracts variables - no need to list them manually.
+// The regex scans for {{variable_name}} patterns in the template string.
+const prompt = ChatPromptTemplate.fromTemplate<{
+  city: string;
+  topic: string;
+}>(
+  `Tell me about {{topic}} in {{city}}. Keep it to 3 sentences.`
+);
+// Internally, inputVariables is now ["topic", "city"]
+
+const chain = prompt.pipe(client);
+
+const result = await chain.invoke('gpt-4o-mini', {
+  city: "Bangalore",
+  topic: "the startup ecosystem"
+});
+
+console.log(result.choices[0]?.message?.content?.toString());
+```
+
+### Example 4 - Custom Post-Processing with `.pipe(fn)`
+
+**Tags:** `pipe(fn)` · `Custom Transform`
+
+One thing I wanted to avoid was forcing you to subclass anything just to add pre-processing logic. So `.pipe()` accepts either an OpenAI client or a plain function. Pass a function and it runs against the formatted prompt string before the API call - useful for injecting system context, logging, or any prompt transformation you need without touching the class hierarchy.
+
+```typescript
+// pipe-function.ts
+import { OpenAI } from 'openai';
+import { ChatPromptTemplate } from '@anuran-roy/langtache';
+
+const client = new OpenAI();
+
+// A custom transform function applied to the formatted prompt
+const addSystemContext = (prompt: string): string => {
+  return `[CONTEXT: You are a helpful assistant for a B2B SaaS company.]\n\n${prompt}`;
+};
+
+const prompt = new ChatPromptTemplate({
+  template: `Summarize the following customer feedback in one sentence: {{feedback}}`,
+  inputVariables: ["feedback"],
+  templateFormat: 'mustache'
+});
+
+// Pipe a transform function - it runs on the formatted string before invoke
+const chain = prompt.pipe(addSystemContext).pipe(client);
+
+const result = await chain.invoke('gpt-4o', {
+  feedback: "The onboarding flow is confusing and the docs are outdated."
+});
+
+console.log(result.choices[0]?.message?.content?.toString());
+```
+
+### Example 5 - Robust JSON Parsing with `parseUntilJson()`
+
+**Tags:** `parseUntilJson` · `Utility`
+
+In practice, LLMs almost never return clean JSON. They wrap it in code fences, add a preamble sentence, or truncate mid-object when they hit a token limit. I wrote `parseUntilJson()` to handle all of those cases through a four-stage fallback pipeline. It's used internally by `getValidatedOutput()`, but you can call it directly whenever you need fault-tolerant JSON extraction.
+
+```typescript
+// parse-until-json.ts
+import { parseUntilJson } from '@anuran-roy/langtache';
+
+// Case 1: Clean JSON - works as expected
+const clean = parseUntilJson('{"name": "Anuran", "role": "CTO"}');
+// → { name: "Anuran", role: "CTO" }
+
+// Case 2: JSON wrapped in markdown code fences (very common with LLMs)
+const fenced = parseUntilJson(`
+\`\`\`json
+{"name": "Anuran", "company": "Alchemyst AI"}
+\`\`\`
+`);
+// → { name: "Anuran", company: "Alchemyst AI" }
+
+// Case 3: JSON with preamble text before it
+const withPreamble = parseUntilJson(
+  `Sure! Here is the JSON you requested:\n{"score": 9, "reason": "Great product"}`
+);
+// → { score: 9, reason: "Great product" }
+
+// Case 4: Partial / truncated JSON (uses the partial-json library as fallback)
+const partial = parseUntilJson('{"name": "Anuran", "skills": ["TypeScript", "Python"');
+// → { name: "Anuran", skills: ["TypeScript", "Python"] }
+
+// Case 5: JSON string literal (outer quotes wrapping the JSON)
+const stringLiteral = parseUntilJson('"{\\"key\\": \\"value\\"}"');
+// → { key: "value" }
+
+console.log(clean, fenced, withPreamble, partial, stringLiteral);
+```
+
+### Example 6 - Multi-Agent Handoff Pattern
+
+**Tags:** `Multi-Agent` · `Runtime Model Selection`
+
+This is the pattern I use most at [Alchemyst AI](https://getalchemystai.com) when building multi-agent pipelines. Because the model is a runtime argument, you can use a cheap fast model for classification and route to a more capable one only when the task demands it - all from the same template definition, with zero framework lock-in.
+
+```typescript
+// multi-agent-handoff.ts
+import { OpenAI } from 'openai';
+import { ChatPromptTemplate } from '@anuran-roy/langtache';
+
+const client = new OpenAI();
+
+// One template, multiple models - chosen at runtime
+const classifierPrompt = new ChatPromptTemplate({
+  template: `Classify the following support ticket as "billing", "technical", or "general".
+  Ticket: {{ticket}}
+  Respond with only the category name.`,
+  inputVariables: ["ticket"],
+  templateFormat: 'mustache'
+});
+
+const chain = classifierPrompt.pipe(client);
+
+async function routeTicket(ticket: string) {
+  // Use a cheap/fast model for classification
+  const classificationResult = await chain.invoke('gpt-4o-mini', { ticket });
+  const category = classificationResult.choices[0]?.message?.content?.trim();
+
+  // Route to a more capable model for complex technical issues
+  const responseModel = category === 'technical' ? 'gpt-4o' : 'gpt-4o-mini';
+
+  const responsePrompt = new ChatPromptTemplate({
+    template: `You are a {{category}} support specialist. Respond to: {{ticket}}`,
+    inputVariables: ["category", "ticket"],
+    templateFormat: 'mustache'
+  });
+
+  const responseChain = responsePrompt.pipe(client);
+  return responseChain.invoke(responseModel, { category, ticket });
+}
+
+const result = await routeTicket("My API key keeps returning 401 errors after rotation.");
+console.log(result.choices[0]?.message?.content?.toString());
+```
+
+## API Reference
+
+I kept the public API surface intentionally small: one class and two utility functions. Everything is fully typed with TypeScript generics - if it compiles, it works.
+
+### `ChatPromptTemplate<T>` - Class
+
+The core class. Wraps a Mustache template string and provides methods to format it with variables, pipe it to an LLM client, and invoke it.
+
+| Member | Type / Signature | Description |
+|---|---|---|
+| `constructor` | `({ template, inputVariables, templateFormat? })` | Creates a new template. `templateFormat` defaults to `'mustache'` (only supported value). |
+| `fromTemplate<T>` | `static (template: string) → ChatPromptTemplate<T>` | Factory method that auto-extracts `{{variable}}` names from the template string using regex. |
+| `pipe` | `(llm: OpenAI) → this` or `(fn: (...args) → string) → this` | Attaches an OpenAI client or a custom transform function. Returns `this` for chaining. |
+| `format<T>` | `(params: T) → string` | Renders the Mustache template with the provided variables. Only variables listed in `inputVariables` are used. |
+| `invoke` | `(model: string, params: T) → Promise<ChatCompletion>` | Formats the template, applies any piped transform functions, and calls `llm.chat.completions.create()`. Throws if no LLM client has been piped. |
+
+
+### `getStructuredOutput<T extends z.ZodTypeAny>` - Function
+
+A higher-order function that takes a Zod schema and returns a prompt-wrapping function. The returned function produces a prompt string that instructs the LLM to return JSON conforming to the schema's JSON Schema representation.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `schema` | `T extends z.ZodTypeAny` | A Zod schema defining the expected output structure. |
+| → returns | `(data: any) → string` | A function that wraps the input data in a JSON Schema-aware prompt. |
+
+
+### `getValidatedOutput<T extends z.ZodTypeAny>` - Function
+
+Parses a raw LLM response string using `parseUntilJson()` and validates the result against a Zod schema. Returns a Zod `SafeParseResult`.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `schema` | `T extends z.ZodTypeAny` | The Zod schema to validate against. |
+| `data` | `string` | The raw string response from the LLM. |
+| → returns | `SafeParseReturnType<z.infer<T>>` | Check `.error` for validation failures or `.data` for the typed result. |
+
+
+### `parseUntilJson` - Utility
+
+A multi-stage, fault-tolerant JSON parser designed for LLM output. Attempts parsing through four progressive stages, falling back gracefully at each step.
+
+| Stage | Strategy |
+|---|---|
+| **Stage 1** | Detect and strip outer string quotes, then attempt `JSON.parse` on the inner content. |
+| **Stage 2** | Attempt standard `JSON.parse` on the trimmed input directly. |
+| **Stage 3** | Strip markdown code fences (` ```json ... ``` `), find the first `{` or `[`, trim preamble text, then retry `JSON.parse`. |
+| **Stage 4** | Use the `partial-json` library to parse incomplete or truncated JSON objects. |
+
+
+## Architecture
+
+I kept the architecture deliberately thin. The data flow is linear and fully transparent - no hidden middleware, no event buses, no abstract base classes beyond `ChatPromptTemplate`. You should be able to read the entire source in under 20 minutes.
+
+```
+Your application
+      │
+      ├── Template String (Mustache syntax)
+      │         +
+      └── Input Variables ({ key: value })
+                │
+                ▼
+      ChatPromptTemplate
+      .format() → rendered string
+                │
+                ▼ (optional)
+      getStructuredOutput(schema)
+      Wraps prompt with JSON Schema instruction
+                │
+                ▼  .pipe(client).invoke(model, params)
+      OpenAI SDK
+      chat.completions.create()
+                │
+                ▼  raw ChatCompletion response
+      parseUntilJson()          →    getValidatedOutput(schema, str)
+      Multi-stage fault-tolerant        Zod SafeParse → typed result
+      parser
+                │
+                ▼
+      { data: z.infer<T> } | { error: ZodError }
+```
+
+## Dependencies
+
+Eight dependencies, each chosen because it's the best tool for exactly one job. I audited every transitive dependency before including anything - no surprises, no bloat.
+
+| Package | Purpose |
+|---|---|
+| `mustache` | The battle-tested logic-less templating engine. Powers all `{{variable}}` interpolation. |
+| `openai` | Official OpenAI Node.js SDK. LangTache wraps it minimally - you get the raw `ChatCompletion` response back. |
+| `zod` | TypeScript-first schema validation. Used to define structured output shapes and validate LLM responses. |
+| `zod-to-json-schema` | Converts Zod schemas to JSON Schema format, embedded in the structured output prompt. |
+| `partial-json` | Parses incomplete or truncated JSON. Used as the final fallback stage in `parseUntilJson()`. |
+| `dotenv` | Loads environment variables from `.env` files. Used in examples to load `OPENAI_API_KEY`. |
+| `typescript` | The entire library is written in TypeScript with strict typing. Ships with full `.d.ts` declaration files. |
+| `@types/mustache` | TypeScript type definitions for the Mustache library, enabling full type safety when calling `Mustache.render()`. |
+
+
+## Where things stand
+
+LangTache is a side project I'm actively developing alongside my work at [Alchemyst AI](https://getalchemystai.com). It's functional and I use it in real workflows, but I haven't hardened it for production use yet - treat it as a well-tested experiment for now.
+
+**Heads up:** I'm at version `0.1.1-beta` and the API may still shift. Right now only the `mustache` template format is supported - Handlebars and others are on the list but not yet implemented.
+
+**Already in:** `ChatPromptTemplate`, Mustache rendering, `.pipe()`/`.invoke()`, `getStructuredOutput`, `getValidatedOutput`, `parseUntilJson`, `fromTemplate` auto-extraction, ESM+CJS dual build.
+
+**Coming next:** Additional template formats beyond Mustache, more LangChain drop-in replacements, broader test coverage, production hardening, and support for additional LLM providers.
+
+**Contributions welcome:** The repo is open - MIT licensed, fork freely, PRs are very welcome. If you've hit a LangChain pain point I haven't addressed yet, open an issue.
