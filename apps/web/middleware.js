@@ -1,9 +1,10 @@
 /**
  * Vercel Routing Middleware (proxy) for anuran.dev.
  * - Markdown negotiation per acceptmarkdown.com: Accept: text/markdown -> .md twin + Vary: Accept
- * - Preserves all existing visuals/interactions (headless rewrites only).
+ * - Agent-friendly 404 markdown for nonexistent paths (404 + text/markdown + sitemap/llms.txt/docs links)
+ * - Preserves all existing visuals/interactions (headless only).
  */
-export default function proxy(request) {
+export default async function proxy(request) {
   const url = new URL(request.url);
   const pathname = url.pathname;
   const accept = request.headers.get("accept") || "";
@@ -13,6 +14,7 @@ export default function proxy(request) {
   }
 
   // Skip non-content paths: APIs, internals, assets, files with extensions.
+  // Note: /llms.txt and /llms-full.txt are already plain-text guides; serve as-is.
   if (
     pathname.startsWith("/api/") ||
     pathname.startsWith("/_astro/") ||
@@ -45,8 +47,55 @@ export default function proxy(request) {
   }
 
   const mdUrl = new URL(mdPath, url);
-  // Rewrite to static .md (served as text/markdown). Vary header is set via vercel.json.
-  return fetch(new Request(mdUrl.toString(), request));
+  const mdRes = await fetch(new Request(mdUrl.toString(), request));
+
+  // Existing .md twin found — return as text/markdown with Vary (fix /.md octet-stream).
+  if (mdRes.ok) {
+    const body = await mdRes.text();
+    return new Response(body, {
+      status: 200,
+      headers: {
+        "Content-Type": "text/markdown; charset=utf-8",
+        Vary: "Accept, Accept-Encoding",
+        "Cache-Control": "public, max-age=0, must-revalidate",
+        "X-Robots-Tag": "noindex",
+      },
+    });
+  }
+
+  // No .md twin — check if HTML page exists? If original path is 404, return agent-friendly markdown 404.
+  // Probe the original request (without Accept rewrite loop: request HTML explicitly).
+  const probeHeaders = new Headers(request.headers);
+  probeHeaders.set("Accept", "text/html");
+  const probe = await fetch(new Request(url.toString(), { headers: probeHeaders }));
+  if (probe.ok) {
+    // HTML exists but .md missing (should be rare) — fall back to HTML with Vary.
+    return fetch(request);
+  }
+
+  const notFoundMd = `# Page not found
+
+The requested anuran.dev resource does not exist (404). Use these public indexes to recover:
+
+- Homepage (Anuran Roy): https://anuran.dev/
+- Sitemap: https://anuran.dev/sitemap-index.xml
+- Site guide: https://anuran.dev/llms.txt
+- Docs (public API): https://anuran.dev/docs
+- Developers (portal, CLI, sandbox): https://anuran.dev/developers
+- About: https://anuran.dev/about
+- Contact: https://anuran.dev/contact
+
+Public API: GET https://anuran.dev/api/v1/health, /api/v1/posts, /api/v1/projects, /api/v1/papers, /api/v1/meta. Spec: https://anuran.dev/openapi.json.
+`;
+  return new Response(notFoundMd, {
+    status: 404,
+    headers: {
+      "Content-Type": "text/markdown; charset=utf-8",
+      Vary: "Accept, Accept-Encoding",
+      "Cache-Control": "no-store",
+      "X-Robots-Tag": "noindex",
+    },
+  });
 }
 
 export const config = {
