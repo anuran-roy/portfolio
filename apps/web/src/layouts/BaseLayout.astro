@@ -105,7 +105,8 @@ const personJsonLd = {
     <meta property="og:title" content={title ?? site.title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    <meta property="og:site_name" content={site.title} />
+    {/* og:site_name uses the personal brand (unique) for agent/search discoverability; visual <title> still uses site.title. */}
+    <meta property="og:site_name" content={site.author.name} />
     {ogImage && <meta property="og:image" content={ogImage} />}
     <meta
       name="twitter:card"
@@ -115,6 +116,7 @@ const personJsonLd = {
 
     {/* Structured data for AI agents: Person (primary) + Organization (contact/address) + WebSite. */}
     <script
+      is:inline
       type="application/ld+json"
       set:html={JSON.stringify(personJsonLd)}
     />
