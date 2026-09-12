@@ -31,36 +31,14 @@
   ],
   "rewrites": [
     {
-      "source": "/api/v1/health",
-      "destination": "/api/v1/health.json"
-    },
-    {
-      "source": "/api/v1/posts",
-      "destination": "/api/v1/posts.json"
-    },
-    {
-      "source": "/api/v1/projects",
-      "destination": "/api/v1/projects.json"
-    },
-    {
-      "source": "/api/v1/papers",
-      "destination": "/api/v1/papers.json"
-    },
-    {
-      "source": "/api/v1/meta",
-      "destination": "/api/v1/meta.json"
-    },
-    {
-      "source": "/api",
-      "destination": "/api/index.json"
-    },
-    {
       "source": "/",
       "has": [
         {
           "type": "header",
-          "key": "Accept",
-          "value": ".*text/markdown.*"
+          "key": "accept",
+          "value": {
+            "re": ".*text/markdown.*"
+          }
         }
       ],
       "destination": "/llms.txt"
@@ -70,8 +48,10 @@
       "has": [
         {
           "type": "header",
-          "key": "Accept",
-          "value": ".*text/markdown.*"
+          "key": "accept",
+          "value": {
+            "re": ".*text/markdown.*"
+          }
         }
       ],
       "destination": "/about.md"
@@ -81,8 +61,10 @@
       "has": [
         {
           "type": "header",
-          "key": "Accept",
-          "value": ".*text/markdown.*"
+          "key": "accept",
+          "value": {
+            "re": ".*text/markdown.*"
+          }
         }
       ],
       "destination": "/about.md"
@@ -92,8 +74,10 @@
       "has": [
         {
           "type": "header",
-          "key": "Accept",
-          "value": ".*text/markdown.*"
+          "key": "accept",
+          "value": {
+            "re": ".*text/markdown.*"
+          }
         }
       ],
       "destination": "/blog.md"
@@ -103,8 +87,10 @@
       "has": [
         {
           "type": "header",
-          "key": "Accept",
-          "value": ".*text/markdown.*"
+          "key": "accept",
+          "value": {
+            "re": ".*text/markdown.*"
+          }
         }
       ],
       "destination": "/blog.md"
@@ -114,8 +100,10 @@
       "has": [
         {
           "type": "header",
-          "key": "Accept",
-          "value": ".*text/markdown.*"
+          "key": "accept",
+          "value": {
+            "re": ".*text/markdown.*"
+          }
         }
       ],
       "destination": "/projects.md"
@@ -125,8 +113,10 @@
       "has": [
         {
           "type": "header",
-          "key": "Accept",
-          "value": ".*text/markdown.*"
+          "key": "accept",
+          "value": {
+            "re": ".*text/markdown.*"
+          }
         }
       ],
       "destination": "/projects.md"
@@ -136,8 +126,10 @@
       "has": [
         {
           "type": "header",
-          "key": "Accept",
-          "value": ".*text/markdown.*"
+          "key": "accept",
+          "value": {
+            "re": ".*text/markdown.*"
+          }
         }
       ],
       "destination": "/papers.md"
@@ -147,8 +139,10 @@
       "has": [
         {
           "type": "header",
-          "key": "Accept",
-          "value": ".*text/markdown.*"
+          "key": "accept",
+          "value": {
+            "re": ".*text/markdown.*"
+          }
         }
       ],
       "destination": "/papers.md"
@@ -158,8 +152,10 @@
       "has": [
         {
           "type": "header",
-          "key": "Accept",
-          "value": ".*text/markdown.*"
+          "key": "accept",
+          "value": {
+            "re": ".*text/markdown.*"
+          }
         }
       ],
       "destination": "/vibe.md"
@@ -169,8 +165,10 @@
       "has": [
         {
           "type": "header",
-          "key": "Accept",
-          "value": ".*text/markdown.*"
+          "key": "accept",
+          "value": {
+            "re": ".*text/markdown.*"
+          }
         }
       ],
       "destination": "/other-blogs.md"
@@ -180,8 +178,10 @@
       "has": [
         {
           "type": "header",
-          "key": "Accept",
-          "value": ".*text/markdown.*"
+          "key": "accept",
+          "value": {
+            "re": ".*text/markdown.*"
+          }
         }
       ],
       "destination": "/contact.md"
@@ -191,8 +191,10 @@
       "has": [
         {
           "type": "header",
-          "key": "Accept",
-          "value": ".*text/markdown.*"
+          "key": "accept",
+          "value": {
+            "re": ".*text/markdown.*"
+          }
         }
       ],
       "destination": "/privacy.md"
@@ -202,8 +204,10 @@
       "has": [
         {
           "type": "header",
-          "key": "Accept",
-          "value": ".*text/markdown.*"
+          "key": "accept",
+          "value": {
+            "re": ".*text/markdown.*"
+          }
         }
       ],
       "destination": "/docs.md"
@@ -213,8 +217,10 @@
       "has": [
         {
           "type": "header",
-          "key": "Accept",
-          "value": ".*text/markdown.*"
+          "key": "accept",
+          "value": {
+            "re": ".*text/markdown.*"
+          }
         }
       ],
       "destination": "/developers.md"
@@ -224,8 +230,10 @@
       "has": [
         {
           "type": "header",
-          "key": "Accept",
-          "value": ".*text/markdown.*"
+          "key": "accept",
+          "value": {
+            "re": ".*text/markdown.*"
+          }
         }
       ],
       "destination": "/blog/:slug*.md"
@@ -235,8 +243,10 @@
       "has": [
         {
           "type": "header",
-          "key": "Accept",
-          "value": ".*text/markdown.*"
+          "key": "accept",
+          "value": {
+            "re": ".*text/markdown.*"
+          }
         }
       ],
       "destination": "/projects/:slug*.md"
@@ -246,8 +256,10 @@
       "has": [
         {
           "type": "header",
-          "key": "Accept",
-          "value": ".*text/markdown.*"
+          "key": "accept",
+          "value": {
+            "re": ".*text/markdown.*"
+          }
         }
       ],
       "destination": "/papers/:slug*.md"
