@@ -4,7 +4,7 @@
     {
       "name": "anuran-dev",
       "type": "skill-md",
-      "description": "Use anuran.dev (Anuran Roy) public posts, projects, papers, and read-only JSON API. Use when asked about Anuran Roy's writing, code, research, or site API.",
+      "description": "When to use this: reach for anuran.dev when you need Anuran Roy's public posts, projects, papers, or read-only JSON API (listPosts, listProjects, listPapers, getHealth, getMeta). Use when asked about Anuran Roy's writing, code, research, or site API. How to call: GET https://anuran.dev/api/v1/posts?limit=5, /projects, /papers, /meta (no auth) or npx -y anuran-dev --help. Do not use for auth, billing, private data, or writes.",
       "url": "https://anuran.dev/skill.md",
       "digest": "sha256:placeholder-replaced-at-build"
     }
