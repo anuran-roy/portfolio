@@ -1,0 +1,13 @@
+{
+  "site": "https://anuran.dev",
+  "version": "1.0.0",
+  "endpoints": {
+    "health": "https://anuran.dev/api/v1/health",
+    "posts": "https://anuran.dev/api/v1/posts",
+    "projects": "https://anuran.dev/api/v1/projects",
+    "papers": "https://anuran.dev/api/v1/papers",
+    "meta": "https://anuran.dev/api/v1/meta"
+  },
+  "docs": "https://anuran.dev/docs",
+  "openapi": "https://anuran.dev/openapi.json"
+}

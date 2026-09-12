@@ -1,0 +1,195 @@
+{
+  "data": [
+    {
+      "slug": "gpus-to-agents/unpiping-langchain",
+      "title": "Unpiping LangChain",
+      "description": "How to replace LangChain Expression Language in 40 lines of code.",
+      "url": "https://anuran.dev/blog/gpus-to-agents/unpiping-langchain/",
+      "date": "2026-07-10T00:00:00.000Z",
+      "tags": [
+        "cuda",
+        "gpu-programming",
+        "low-level programming",
+        "advanced",
+        "hardware"
+      ]
+    },
+    {
+      "slug": "diary-of-a-cto/managing-tech-debt",
+      "title": "Managing Tech Debt",
+      "description": "Building is cool, but you know what comes after that? Maintenance. Yes, that's where the trap of tech debt starts to pile up. In this age of AI, when you can build something in minutes but you would need to maintain it for years, where exactly does this leave you as a manager, or a senior IC?",
+      "url": "https://anuran.dev/blog/diary-of-a-cto/managing-tech-debt/",
+      "date": "2026-07-07T00:00:00.000Z",
+      "tags": [
+        "tech debt",
+        "technical leadership",
+        "product management",
+        "startups"
+      ]
+    },
+    {
+      "slug": "gpus-to-agents/x-ray-simple-nn-in-cuda",
+      "title": "X-Ray view into Neural Networks",
+      "description": "What happens underneath a single Neural Network's Layer - from warps to assembly-level instructions.",
+      "url": "https://anuran.dev/blog/gpus-to-agents/x-ray-simple-nn-in-cuda/",
+      "date": "2026-06-30T00:00:00.000Z",
+      "tags": [
+        "cuda",
+        "gpu-programming",
+        "low-level programming",
+        "advanced",
+        "hardware"
+      ]
+    },
+    {
+      "slug": "gpus-to-agents/cuda-execution-model",
+      "title": "CUDA Execution Model",
+      "description": "A primer on the computing model powering the world's AI revolution.",
+      "url": "https://anuran.dev/blog/gpus-to-agents/cuda-execution-model/",
+      "date": "2026-06-20T00:00:00.000Z",
+      "tags": [
+        "cuda",
+        "gpu-programming",
+        "low-level programming",
+        "advanced",
+        "hardware"
+      ]
+    },
+    {
+      "slug": "gpus-to-agents/x-ray-cuda-2d-operations",
+      "title": "X-Ray view into CUDA for 2D operations.",
+      "description": "From Warps to PTX - an X-Ray view into leveraging true parallelism in GPUs.",
+      "url": "https://anuran.dev/blog/gpus-to-agents/x-ray-cuda-2d-operations/",
+      "date": "2026-06-20T00:00:00.000Z",
+      "tags": [
+        "cuda",
+        "gpu-programming",
+        "low-level programming",
+        "advanced",
+        "hardware"
+      ]
+    },
+    {
+      "slug": "gpus-to-agents/gpu-internals",
+      "title": "GPU Internals",
+      "description": "How GPUs are truly different from CPUs by discarding legacy baggage of CPUs.",
+      "url": "https://anuran.dev/blog/gpus-to-agents/gpu-internals/",
+      "date": "2026-06-10T00:00:00.000Z",
+      "tags": [
+        "cuda",
+        "gpu-programming",
+        "low-level programming",
+        "advanced",
+        "hardware"
+      ]
+    },
+    {
+      "slug": "semantic-consensus",
+      "title": "Semantic Consensus and Semantic Drift",
+      "description": "Contextual AI Agents are the present, transforming every workplace. But an AI agent is only as correct as the context as it references.",
+      "url": "https://anuran.dev/blog/semantic-consensus/",
+      "date": "2026-06-06T00:00:00.000Z",
+      "tags": [
+        "ontology",
+        "semantic consensus",
+        "ai memory",
+        "context engineering"
+      ]
+    },
+    {
+      "slug": "build-a-company-brain",
+      "title": "How to ACTUALLY build a \\\"Company Brain\\\"",
+      "description": "Contextual AI Agents are the present, transforming every workplace. But an AI agent is only as correct as the context as it references.",
+      "url": "https://anuran.dev/blog/build-a-company-brain/",
+      "date": "2026-05-15T00:00:00.000Z",
+      "tags": [
+        "ontology",
+        "company brain",
+        "ai memory",
+        "context engineering"
+      ]
+    },
+    {
+      "slug": "diary-of-a-cto/arise-self-hosting-for-technical-founders",
+      "title": "To self-host or not to self-host?",
+      "description": "Startup credits for infrastructure are a lifesaver, but only if it does not entail endless maintenance. How do you decide, as an early-stage technical founder, what to host and what not to host?",
+      "url": "https://anuran.dev/blog/diary-of-a-cto/arise-self-hosting-for-technical-founders/",
+      "date": "2026-01-19T00:00:00.000Z",
+      "tags": [
+        "self-hosting",
+        "cost management",
+        "budgeting",
+        "startups"
+      ]
+    },
+    {
+      "slug": "pymetrix/pymetrix-flow",
+      "title": "Flow classes in Pymetrix",
+      "description": "A look at the Flow Class objects - FlowNode, FlowLayer, and FlowGraph - that form the building blocks of Pymetrix.",
+      "url": "https://anuran.dev/blog/pymetrix/pymetrix-flow/",
+      "date": "2021-11-20T00:00:00.000Z",
+      "tags": [
+        "python",
+        "analytics",
+        "pymetrix",
+        "foss"
+      ]
+    },
+    {
+      "slug": "pymetrix/pymetrix-home",
+      "title": "Pymetrix: The Open Source Plug and Play Python Analytics Library",
+      "description": "An introduction to Pymetrix, a plug-and-play analytics library written in Python for monitoring application performance metrics.",
+      "url": "https://anuran.dev/blog/pymetrix/pymetrix-home/",
+      "date": "2021-11-20T00:00:00.000Z",
+      "tags": [
+        "python",
+        "analytics",
+        "pymetrix",
+        "foss"
+      ]
+    },
+    {
+      "slug": "pymetrix/pymetrix-overview",
+      "title": "Pymetrix: An Overview",
+      "description": "An architectural overview of Pymetrix - the Flow Graph, the Database, and the extensible Plugins system.",
+      "url": "https://anuran.dev/blog/pymetrix/pymetrix-overview/",
+      "date": "2021-11-20T00:00:00.000Z",
+      "tags": [
+        "python",
+        "analytics",
+        "pymetrix",
+        "foss"
+      ]
+    },
+    {
+      "slug": "machine-learning",
+      "title": "Machine learning and the Pythonic buzz",
+      "description": "A beginner-friendly introduction to machine learning with Python and scikit-learn, building a first model on the Boston housing dataset.",
+      "url": "https://anuran.dev/blog/machine-learning/",
+      "date": "2021-08-29T00:00:00.000Z",
+      "tags": [
+        "python",
+        "machine-learning",
+        "scikit-learn",
+        "beginner",
+        "ai"
+      ]
+    },
+    {
+      "slug": "offline-speech-with-vosk",
+      "title": "Offline Speech Recognition with Vosk",
+      "description": "Build an offline speech-to-command system in Python by combining Vosk for speech recognition with NLTK for keyword extraction.",
+      "url": "https://anuran.dev/blog/offline-speech-with-vosk/",
+      "date": "2021-07-24T00:00:00.000Z",
+      "tags": [
+        "python",
+        "nlp",
+        "vosk",
+        "ai",
+        "nltk",
+        "foss"
+      ]
+    }
+  ],
+  "count": 14
+}

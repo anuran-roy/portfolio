@@ -1,0 +1,29 @@
+{
+  "data": [
+    {
+      "slug": "are-large-context-windows-all-you-need",
+      "title": "Is a Large Context Window all you need?",
+      "description": "Exploring Time To First Token (TTFT)-context size tradeoff for Autoregressive LLMs",
+      "url": "https://anuran.dev/papers/are-large-context-windows-all-you-need/"
+    },
+    {
+      "slug": "mitigating-hallucinations-in-llms",
+      "title": "Mitigating Hallucinations in LLMs",
+      "description": "Mitigating Hallucinations in LLMs Using Sieve of Fallacies and Truths: A Game Theoretic Perspective",
+      "url": "https://anuran.dev/papers/mitigating-hallucinations-in-llms/"
+    },
+    {
+      "slug": "oscillating-activation-functions",
+      "title": "Oscillating Activation Functions",
+      "description": "Oscillating activation functions and other recent progress in activation functions: A survey",
+      "url": "https://anuran.dev/papers/oscillating-activation-functions/"
+    },
+    {
+      "slug": "serpytor",
+      "title": "SerpyTor",
+      "description": "A distributed context-aware computational graph execution framework for durable execution",
+      "url": "https://anuran.dev/papers/serpytor/"
+    }
+  ],
+  "count": 4
+}

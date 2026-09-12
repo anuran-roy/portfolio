@@ -1,0 +1,21 @@
+{
+  "site": {
+    "name": "Anuran Roy — A Tinkerer's Canvas",
+    "url": "https://anuran.dev",
+    "description": "Anuran's journal on the internet - capturing his late-night breakdowns to his Eureka moments."
+  },
+  "author": {
+    "name": "Anuran Roy",
+    "url": "https://anuran.dev/about"
+  },
+  "resources": {
+    "docs": "https://anuran.dev/docs",
+    "developers": "https://anuran.dev/developers",
+    "openapi": "https://anuran.dev/openapi.json",
+    "sitemap": "https://anuran.dev/sitemap-index.xml",
+    "llmsTxt": "https://anuran.dev/llms.txt",
+    "rss": "https://anuran.dev/rss.xml",
+    "contact": "https://anuran.dev/contact",
+    "privacy": "https://anuran.dev/privacy"
+  }
+}

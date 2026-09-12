@@ -1,0 +1,53 @@
+{
+  "data": [
+    {
+      "slug": "barebonesdb",
+      "title": "BarebonesDB",
+      "description": "A lightweight NoSQL-style database using JSON files for small projects, built from scratch in Python.",
+      "url": "https://anuran.dev/projects/barebonesdb/"
+    },
+    {
+      "slug": "drax",
+      "title": "Drax",
+      "description": "A brute-force utility with captcha detection, automatic proxy rotation, and session save/resume capabilities.",
+      "url": "https://anuran.dev/projects/drax/"
+    },
+    {
+      "slug": "langtache",
+      "title": "LangTache",
+      "description": "Drop in replacements for popular LangChain types, without the OOP hell.",
+      "url": "https://anuran.dev/projects/langtache/"
+    },
+    {
+      "slug": "opneco",
+      "title": "OpnEco",
+      "description": "A content-writing companion tool offering feedback mechanisms and keyword-targeting guidance for writers, with data analysis and trend insights.",
+      "url": "https://anuran.dev/projects/opneco/"
+    },
+    {
+      "slug": "opnrank",
+      "title": "OpnRank",
+      "description": "A lightweight, extensible SEO metrics scanner for analyzing search-engine-optimization data.",
+      "url": "https://anuran.dev/projects/opnrank/"
+    },
+    {
+      "slug": "pratilekha",
+      "title": "Pratilekha",
+      "description": "On-device STT models with Indic Language Support (8). Focused on Devnagari Languages in noisy environments, these on-device STT models are specifically tuned for different accents, and real world applications and not just for crushing benchmarks in lab tests.",
+      "url": "https://anuran.dev/projects/pratilekha/"
+    },
+    {
+      "slug": "pymetrix",
+      "title": "Pymetrix",
+      "description": "A plug-and-play analytics library written in Python to capture basic website metrics, with extension support for Django, Flask, FastAPI, and Starlite.",
+      "url": "https://anuran.dev/projects/pymetrix/"
+    },
+    {
+      "slug": "speech2text",
+      "title": "Vosk-based Speech2Text System",
+      "description": "An offline speech-to-text converter using Vosk.",
+      "url": "https://anuran.dev/projects/speech2text/"
+    }
+  ],
+  "count": 8
+}
