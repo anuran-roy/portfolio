@@ -26,6 +26,59 @@ const {
 const pageTitle = title ? `${title} · ${site.title}` : site.title
 const canonical = new URL(Astro.url.pathname, Astro.site).toString()
 const ogImage = new URL(image ?? "/open-graph/site.png", Astro.site).toString()
+
+const isHome = Astro.url.pathname === "/"
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": `${site.url}/#person`,
+      name: site.author.name,
+      alternateName: ["Anuran", "anuran.dev"],
+      url: site.url,
+      image: new URL(site.author.avatar, site.url).toString(),
+      description: site.description,
+      email: `mailto:${site.author.email}`,
+      sameAs: [...site.sameAs],
+    },
+    {
+      "@type": "Organization",
+      "@id": `${site.url}/#organization`,
+      name: site.author.name,
+      alternateName: site.title,
+      url: site.url,
+      description: site.description,
+      email: site.author.email,
+      contactPoint: {
+        "@type": "ContactPoint",
+        contactType: "personal",
+        email: site.author.email,
+        url: `${site.url}/contact`,
+        availableLanguage: "English",
+      },
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: site.location.streetAddress,
+        addressLocality: site.location.addressLocality,
+        addressRegion: site.location.addressRegion,
+        postalCode: site.location.postalCode,
+        addressCountry: site.location.addressCountry,
+      },
+      sameAs: [...site.sameAs],
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${site.url}/#website`,
+      name: `${site.author.name} — ${site.title}`,
+      alternateName: ["Anuran Roy", "anuran.dev", site.title],
+      url: site.url,
+      description: site.description,
+      publisher: { "@id": `${site.url}/#person` },
+      inLanguage: "en",
+    },
+  ],
+}
 ---
 
 <!doctype html>
@@ -59,6 +112,12 @@ const ogImage = new URL(image ?? "/open-graph/site.png", Astro.site).toString()
       content={ogImage ? "summary_large_image" : "summary"}
     />
     {ogImage && <meta name="twitter:image" content={ogImage} />}
+
+    {/* Structured data for AI agents: Person (primary) + Organization (contact/address) + WebSite. */}
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(personJsonLd)}
+    />
 
     {/* FOUC-prevention: apply the theme before first paint, then persist changes. */}
     <script is:inline>

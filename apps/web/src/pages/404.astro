@@ -11,5 +11,49 @@ import BaseLayout from "@/layouts/BaseLayout.astro"
       The page you're looking for doesn't exist or has moved.
     </p>
     <a href="/" class="mt-6"><Button>Back home</Button></a>
+    <div class="mt-10 w-full max-w-md text-left">
+      <h2 class="font-heading text-sm font-semibold">Where to look next</h2>
+      <ul class="mt-3 space-y-2 text-sm text-muted-foreground">
+        <li>
+          <a href="/" class="underline-offset-4 hover:underline"
+            >Homepage — Hi, I'm Anuran Roy.</a
+          >
+        </li>
+        <li>
+          <a href="/sitemap-index.xml" class="underline-offset-4 hover:underline"
+            >XML sitemap — full list of pages</a
+          >
+        </li>
+        <li>
+          <a href="/llms.txt" class="underline-offset-4 hover:underline"
+            >llms.txt — machine-readable site guide</a
+          >
+        </li>
+        <li>
+          <a href="/docs" class="underline-offset-4 hover:underline"
+            >Docs — API documentation and quickstart</a
+          >
+        </li>
+        <li>
+          <a href="/developers" class="underline-offset-4 hover:underline"
+            >Developers — portal, CLI, and sandbox</a
+          >
+        </li>
+        <li>
+          <a href="/about" class="underline-offset-4 hover:underline"
+            >About Anuran Roy</a
+          >
+        </li>
+      </ul>
+      <pre
+        class="mt-6 overflow-x-auto border border-border bg-muted/40 p-4 font-mono text-xs text-muted-foreground"># Page not found (404)
+#
+# Try these public indexes to recover:
+# - Homepage: https://anuran.dev/
+# - Sitemap: https://anuran.dev/sitemap-index.xml
+# - Site guide: https://anuran.dev/llms.txt
+# - Docs: https://anuran.dev/docs
+# - Developers: https://anuran.dev/developers</pre>
+    </div>
   </section>
 </BaseLayout>

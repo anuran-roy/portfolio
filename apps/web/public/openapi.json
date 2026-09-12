@@ -1,0 +1,276 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "anuran.dev public read-only API",
+    "version": "1.0.0",
+    "description": "Public read-only JSON API for anuran.dev (A Tinkerer's Canvas) by Anuran Roy. No authentication required. Lists blog posts, projects, papers, and site metadata. See /docs and /developers for quickstart, CLI (npx anuran-dev), and sandbox.",
+    "termsOfService": "https://anuran.dev/privacy",
+    "contact": {
+      "name": "Anuran Roy",
+      "url": "https://anuran.dev/contact",
+      "email": "anuranroy02@gmail.com"
+    },
+    "license": {
+      "name": "Content © Anuran Roy — API responses may be cached and linked with attribution",
+      "url": "https://anuran.dev/about"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://anuran.dev",
+      "description": "anuran.dev production"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Meta",
+      "description": "Site identity and liveness."
+    },
+    {
+      "name": "Content",
+      "description": "Public blog posts, projects, and papers by Anuran Roy."
+    }
+  ],
+  "externalDocs": {
+    "description": "anuran.dev API documentation, developer portal, and machine-readable guides",
+    "url": "https://anuran.dev/docs"
+  },
+  "paths": {
+    "/api/v1/health": {
+      "get": {
+        "operationId": "getHealth",
+        "summary": "Liveness check",
+        "description": "Returns service liveness, site URL, and API version. Use to verify the API is reachable before listing content.",
+        "tags": ["Meta"],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Service is healthy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["status", "site", "version"],
+                  "properties": {
+                    "status": { "type": "string", "example": "ok" },
+                    "site": { "type": "string", "format": "uri", "example": "https://anuran.dev" },
+                    "version": { "type": "string", "example": "1.0.0" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/posts": {
+      "get": {
+        "operationId": "listPosts",
+        "summary": "List blog posts",
+        "description": "Lists published blog posts by Anuran Roy, newest first. Filter by tag. Use for RAG, site search, and content discovery.",
+        "tags": ["Content"],
+        "security": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "description": "Max posts to return (1-50).",
+            "schema": { "type": "integer", "minimum": 1, "maximum": 50, "default": 10 },
+            "example": 5
+          },
+          {
+            "in": "query",
+            "name": "tag",
+            "required": false,
+            "description": "Filter by exact tag (e.g. python, ai, startups).",
+            "schema": { "type": "string", "maxLength": 64 },
+            "example": "python"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of blog posts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["data", "count"],
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": ["slug", "title", "description", "url"],
+                        "properties": {
+                          "slug": { "type": "string", "description": "Post slug, e.g. build-a-company-brain" },
+                          "title": { "type": "string" },
+                          "description": { "type": "string" },
+                          "url": { "type": "string", "format": "uri" },
+                          "date": { "type": "string", "format": "date-time" },
+                          "tags": { "type": "array", "items": { "type": "string" } }
+                        }
+                      }
+                    },
+                    "count": { "type": "integer" }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid query (e.g. limit out of range)",
+            "content": {
+              "application/problem+json": {
+                "schema": { "$ref": "#/components/schemas/Problem" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/projects": {
+      "get": {
+        "operationId": "listProjects",
+        "summary": "List projects",
+        "description": "Lists open-source projects and experiments by Anuran Roy with descriptions and URLs.",
+        "tags": ["Content"],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "A list of projects",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["data", "count"],
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": ["slug", "title", "description", "url"],
+                        "properties": {
+                          "slug": { "type": "string" },
+                          "title": { "type": "string" },
+                          "description": { "type": "string" },
+                          "url": { "type": "string", "format": "uri" }
+                        }
+                      }
+                    },
+                    "count": { "type": "integer" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/papers": {
+      "get": {
+        "operationId": "listPapers",
+        "summary": "List papers",
+        "description": "Lists research papers and technical writing by Anuran Roy.",
+        "tags": ["Content"],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "A list of papers",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["data", "count"],
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": ["slug", "title", "description", "url"],
+                        "properties": {
+                          "slug": { "type": "string" },
+                          "title": { "type": "string" },
+                          "description": { "type": "string" },
+                          "url": { "type": "string", "format": "uri" }
+                        }
+                      }
+                    },
+                    "count": { "type": "integer" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/meta": {
+      "get": {
+        "operationId": "getMeta",
+        "summary": "Site metadata",
+        "description": "Returns anuran.dev identity, author, and index of machine-readable resources (sitemap, llms.txt, rss, openapi). Use to discover all agent surfaces in one call.",
+        "tags": ["Meta"],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Site metadata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["site", "author", "resources"],
+                  "properties": {
+                    "site": {
+                      "type": "object",
+                      "required": ["name", "url", "description"],
+                      "properties": {
+                        "name": { "type": "string", "example": "Anuran Roy — A Tinkerer's Canvas" },
+                        "url": { "type": "string", "format": "uri", "example": "https://anuran.dev" },
+                        "description": { "type": "string" }
+                      }
+                    },
+                    "author": {
+                      "type": "object",
+                      "required": ["name", "url"],
+                      "properties": {
+                        "name": { "type": "string", "example": "Anuran Roy" },
+                        "url": { "type": "string", "format": "uri" }
+                      }
+                    },
+                    "resources": {
+                      "type": "object",
+                      "properties": {
+                        "docs": { "type": "string", "format": "uri" },
+                        "developers": { "type": "string", "format": "uri" },
+                        "openapi": { "type": "string", "format": "uri" },
+                        "sitemap": { "type": "string", "format": "uri" },
+                        "llmsTxt": { "type": "string", "format": "uri" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Problem": {
+        "type": "object",
+        "required": ["type", "title", "status", "code", "message", "hint"],
+        "properties": {
+          "type": { "type": "string", "example": "about:blank" },
+          "title": { "type": "string", "example": "Invalid limit" },
+          "status": { "type": "integer", "example": 400 },
+          "code": { "type": "string", "example": "invalid_limit" },
+          "message": { "type": "string", "example": "limit must be an integer between 1 and 50." },
+          "hint": { "type": "string", "example": "Try /api/v1/posts?limit=5. See /docs and /openapi.json." }
+        }
+      }
+    }
+  }
+}

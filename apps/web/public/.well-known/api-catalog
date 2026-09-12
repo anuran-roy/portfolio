@@ -1,0 +1,19 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://anuran.dev/api/v1/meta",
+      "service-desc": [
+        {
+          "href": "https://anuran.dev/openapi.json",
+          "type": "application/vnd.oai.openapi+json"
+        }
+      ],
+      "service-doc": [
+        {
+          "href": "https://anuran.dev/docs",
+          "type": "text/html"
+        }
+      ]
+    }
+  ]
+}

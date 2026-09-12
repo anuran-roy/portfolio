@@ -61,5 +61,8 @@ export default defineConfig({
     "/post/projects/pymetrix/flow": "/blog/pymetrix-flow",
     "/categories/[category]": "/blog/categories/[category]",
     "/tags/[tag]": "/blog/tags/[tag]",
+    // Blog restructure: flat ARISE URL -> nested Diary of a CTO series URL.
+    "/blog/arise-self-hosting-for-technical-founders":
+      "/blog/diary-of-a-cto/arise-self-hosting-for-technical-founders",
   },
 })

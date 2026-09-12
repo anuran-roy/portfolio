@@ -1,0 +1,25 @@
+{
+  "name": "anuran-dev",
+  "version": "1.0.0",
+  "description": "Official CLI for anuran.dev (Anuran Roy) — list posts, projects, papers via the public read-only JSON API.",
+  "type": "module",
+  "bin": {
+    "anuran-dev": "./cli.js"
+  },
+  "files": ["cli.js", "README.md"],
+  "scripts": {
+    "test": "node cli.js --help"
+  },
+  "keywords": ["anuran-dev", "anuran-roy", "blog", "api", "cli", "agents"],
+  "author": "Anuran Roy <anuranroy02@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/anuran-roy/portfolio.git",
+    "directory": "packages/cli"
+  },
+  "homepage": "https://anuran.dev/developers",
+  "engines": {
+    "node": ">=18"
+  }
+}

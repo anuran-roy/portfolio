@@ -1,0 +1,256 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Vary",
+          "value": "Accept, Accept-Encoding"
+        }
+      ]
+    },
+    {
+      "source": "/.well-known/api-catalog",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/json; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "source": "/openapi.json",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/vnd.oai.openapi+json; charset=utf-8"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/v1/health",
+      "destination": "/api/v1/health.json"
+    },
+    {
+      "source": "/api/v1/posts",
+      "destination": "/api/v1/posts.json"
+    },
+    {
+      "source": "/api/v1/projects",
+      "destination": "/api/v1/projects.json"
+    },
+    {
+      "source": "/api/v1/papers",
+      "destination": "/api/v1/papers.json"
+    },
+    {
+      "source": "/api/v1/meta",
+      "destination": "/api/v1/meta.json"
+    },
+    {
+      "source": "/api",
+      "destination": "/api/index.json"
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "header",
+          "key": "Accept",
+          "value": ".*text/markdown.*"
+        }
+      ],
+      "destination": "/llms.txt"
+    },
+    {
+      "source": "/about",
+      "has": [
+        {
+          "type": "header",
+          "key": "Accept",
+          "value": ".*text/markdown.*"
+        }
+      ],
+      "destination": "/about.md"
+    },
+    {
+      "source": "/about/",
+      "has": [
+        {
+          "type": "header",
+          "key": "Accept",
+          "value": ".*text/markdown.*"
+        }
+      ],
+      "destination": "/about.md"
+    },
+    {
+      "source": "/blog",
+      "has": [
+        {
+          "type": "header",
+          "key": "Accept",
+          "value": ".*text/markdown.*"
+        }
+      ],
+      "destination": "/blog.md"
+    },
+    {
+      "source": "/blog/",
+      "has": [
+        {
+          "type": "header",
+          "key": "Accept",
+          "value": ".*text/markdown.*"
+        }
+      ],
+      "destination": "/blog.md"
+    },
+    {
+      "source": "/projects",
+      "has": [
+        {
+          "type": "header",
+          "key": "Accept",
+          "value": ".*text/markdown.*"
+        }
+      ],
+      "destination": "/projects.md"
+    },
+    {
+      "source": "/projects/",
+      "has": [
+        {
+          "type": "header",
+          "key": "Accept",
+          "value": ".*text/markdown.*"
+        }
+      ],
+      "destination": "/projects.md"
+    },
+    {
+      "source": "/papers",
+      "has": [
+        {
+          "type": "header",
+          "key": "Accept",
+          "value": ".*text/markdown.*"
+        }
+      ],
+      "destination": "/papers.md"
+    },
+    {
+      "source": "/papers/",
+      "has": [
+        {
+          "type": "header",
+          "key": "Accept",
+          "value": ".*text/markdown.*"
+        }
+      ],
+      "destination": "/papers.md"
+    },
+    {
+      "source": "/vibe",
+      "has": [
+        {
+          "type": "header",
+          "key": "Accept",
+          "value": ".*text/markdown.*"
+        }
+      ],
+      "destination": "/vibe.md"
+    },
+    {
+      "source": "/other-blogs",
+      "has": [
+        {
+          "type": "header",
+          "key": "Accept",
+          "value": ".*text/markdown.*"
+        }
+      ],
+      "destination": "/other-blogs.md"
+    },
+    {
+      "source": "/contact",
+      "has": [
+        {
+          "type": "header",
+          "key": "Accept",
+          "value": ".*text/markdown.*"
+        }
+      ],
+      "destination": "/contact.md"
+    },
+    {
+      "source": "/privacy",
+      "has": [
+        {
+          "type": "header",
+          "key": "Accept",
+          "value": ".*text/markdown.*"
+        }
+      ],
+      "destination": "/privacy.md"
+    },
+    {
+      "source": "/docs",
+      "has": [
+        {
+          "type": "header",
+          "key": "Accept",
+          "value": ".*text/markdown.*"
+        }
+      ],
+      "destination": "/docs.md"
+    },
+    {
+      "source": "/developers",
+      "has": [
+        {
+          "type": "header",
+          "key": "Accept",
+          "value": ".*text/markdown.*"
+        }
+      ],
+      "destination": "/developers.md"
+    },
+    {
+      "source": "/blog/:slug*",
+      "has": [
+        {
+          "type": "header",
+          "key": "Accept",
+          "value": ".*text/markdown.*"
+        }
+      ],
+      "destination": "/blog/:slug*.md"
+    },
+    {
+      "source": "/projects/:slug*",
+      "has": [
+        {
+          "type": "header",
+          "key": "Accept",
+          "value": ".*text/markdown.*"
+        }
+      ],
+      "destination": "/projects/:slug*.md"
+    },
+    {
+      "source": "/papers/:slug*",
+      "has": [
+        {
+          "type": "header",
+          "key": "Accept",
+          "value": ".*text/markdown.*"
+        }
+      ],
+      "destination": "/papers/:slug*.md"
+    }
+  ]
+}

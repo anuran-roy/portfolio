@@ -1,0 +1,12 @@
+{
+  "$schema": "https://schemas.agentskills.io/discovery/0.2.0/schema.json",
+  "skills": [
+    {
+      "name": "anuran-dev",
+      "type": "skill-md",
+      "description": "Use anuran.dev (Anuran Roy) public posts, projects, papers, and read-only JSON API. Use when asked about Anuran Roy's writing, code, research, or site API.",
+      "url": "https://anuran.dev/skill.md",
+      "digest": "sha256:placeholder-replaced-at-build"
+    }
+  ]
+}

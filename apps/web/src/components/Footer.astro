@@ -15,4 +15,26 @@ const year = new Date().getFullYear()
     </div>
     <SocialLinks />
   </div>
+  {/* Agent-readable site index: visually hidden so existing visuals/interactions are unchanged. */}
+  <div class="sr-only" aria-hidden="false">
+    <nav aria-label="Agent and developer resources">
+      <ul>
+        <li><a href="/docs">API documentation</a></li>
+        <li><a href="/developers">Developer portal</a></li>
+        <li><a href="/api">Public API index</a></li>
+        <li><a href="/openapi.json">OpenAPI specification</a></li>
+        <li><a href="/contact">Contact Anuran Roy</a></li>
+        <li><a href="/privacy">Privacy policy</a></li>
+        <li><a href="/about">About Anuran Roy</a></li>
+        <li><a href="/sitemap-index.xml">XML sitemap</a></li>
+        <li><a href="/llms.txt">Machine-readable site guide (llms.txt)</a></li>
+        <li><a href="/rss.xml">RSS feed</a></li>
+      </ul>
+    </nav>
+    <p>
+      Anuran Roy (anuran.dev) — A Tinkerer's Canvas. Public JSON API with no
+      auth required. Official CLI: npx anuran-dev. See /developers for
+      quickstart, API keys policy, and sandbox.
+    </p>
+  </div>
 </footer>

@@ -1,0 +1,111 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro"
+---
+
+<BaseLayout
+  title="Developers"
+  description="Developer portal for anuran.dev — public JSON API, OpenAPI spec, quickstart, CLI, and sandbox for Anuran Roy's site."
+  width="narrow"
+>
+  <header class="mb-8">
+    <h1 class="font-heading text-3xl font-bold tracking-tight">Developers</h1>
+    <p class="mt-2 text-muted-foreground">
+      Portal for Anuran Roy at anuran.dev — read-only API, docs, CLI, and sandbox.
+    </p>
+  </header>
+
+  <article
+    class="prose prose-neutral max-w-none dark:prose-invert prose-headings:font-heading prose-a:text-foreground"
+  >
+    <p>
+      Welcome, humans and agents. <strong>anuran.dev</strong> by
+      <strong>Anuran Roy</strong> exposes a small, public, read-only JSON API for
+      posts, projects, and papers. No signup, no API keys, no OAuth. If you can
+      <code>curl</code>, you can use it.
+    </p>
+
+    <h2>Quickstart (60 seconds)</h2>
+    <pre><code># 1. List latest blog posts
+curl -s https://anuran.dev/api/v1/posts | head -c 500
+
+# 2. List projects
+curl -s https://anuran.dev/api/v1/projects | head -c 500
+
+# 3. Read the OpenAPI spec
+curl -s https://anuran.dev/openapi.json | head -c 500
+
+# 4. Machine-readable site guide
+curl -s https://anuran.dev/llms.txt | head -n 40
+</code></pre>
+
+    <h2>API keys and authentication</h2>
+    <p>
+      Authentication: <strong>none required</strong>. All <code>/api/v1/*</code>
+      endpoints are <code>GET</code>-only and public. Rate limits are standard
+      CDN fair-use only. Do not send <code>Authorization</code> headers,
+      credentials, or secrets — they are ignored. If you need private data, you
+      are in the wrong place; see <a href="/contact">/contact</a>.
+    </p>
+
+    <h2>Documentation</h2>
+    <ul>
+      <li><a href="/docs">/docs</a> — full API documentation with auth, endpoints, and examples</li>
+      <li><a href="/openapi.json">/openapi.json</a> — OpenAPI 3.1 spec (operationIds, typed schemas)</li>
+      <li><a href="/.well-known/api-catalog">/.well-known/api-catalog</a> — RFC 9727 API catalog</li>
+      <li><a href="/llms.txt">/llms.txt</a> — site guide for LLMs with when-to-use</li>
+      <li><a href="/sitemap-index.xml">/sitemap-index.xml</a> — canonical URL list</li>
+    </ul>
+
+    <h2>Official CLI</h2>
+    <p>
+      Official CLI: <strong><code>anuran-dev</code></strong> on npm.
+      It wraps the read-only API so agents and developers can script without
+      hand-rolling fetch calls.
+    </p>
+    <pre><code># Run without installing
+npx -y anuran-dev --help
+npx -y anuran-dev posts --limit 5
+npx -y anuran-dev projects --json
+
+# Or install globally
+npm install -g anuran-dev
+anuran-dev --help
+
+# Sources
+# npm: https://www.npmjs.com/package/anuran-dev
+# repo: https://github.com/anuran-roy/portfolio/tree/main/packages/cli
+</code></pre>
+    <p>
+      See <a href="https://www.npmjs.com/package/anuran-dev">anuran-dev on npm</a>
+      and the <a href="https://github.com/anuran-roy/portfolio">GitHub repo</a>.
+    </p>
+
+    <h2>Sandbox (no keys)</h2>
+    <p>
+      Sandbox = production, because everything is read-only. Try in your browser
+      or terminal:
+    </p>
+    <ul>
+      <li><code>GET https://anuran.dev/api/v1/health</code> — liveness + version</li>
+      <li><code>GET https://anuran.dev/api/v1/posts?limit=2</code> — two latest posts</li>
+      <li><code>GET https://anuran.dev/api/v1/projects</code> — projects index</li>
+      <li><code>GET https://anuran.dev/api/v1/papers</code> — papers index</li>
+    </ul>
+    <p>
+      Errors are JSON (<code>application/problem+json</code>) with
+      <code>code</code>, <code>message</code>, and <code>hint</code>. Example:
+      <code>GET /api/v1/posts?limit=9999</code> returns <code>400</code> with
+      <code>&#123;"code":"invalid_limit", ...&#125;</code>.
+    </p>
+
+    <h2>Markdown negotiation</h2>
+    <p>
+      Content pages support <code>Accept: text/markdown</code> per
+      acceptmarkdown.com. Negotiated responses use
+      <code>Content-Type: text/markdown; charset=utf-8</code> and
+      <code>Vary: Accept</code>. Example:
+    </p>
+    <pre><code>curl -H "Accept: text/markdown" https://anuran.dev/about
+# -&gt; text/markdown body, Vary: Accept</code></pre>
+  </article>
+</BaseLayout>

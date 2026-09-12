@@ -42,6 +42,23 @@ export const site = {
     avatar: "/images/avatar.jpg",
     resume: "/documents/cv.pdf",
   },
+  contact: {
+    email: "anuranroy02@gmail.com",
+    url: "https://anuran.dev/contact",
+  },
+  location: {
+    streetAddress: "Vellore, Tamil Nadu",
+    addressLocality: "Vellore",
+    addressRegion: "Tamil Nadu",
+    postalCode: "632014",
+    addressCountry: "IN",
+  },
+  sameAs: [
+    "https://github.com/anuran-roy",
+    "https://www.linkedin.com/in/anuran-roy",
+    "https://twitter.com/AnuranRoy",
+    "https://tinker.hashnode.dev",
+  ],
   blog: {
     postsPerPage: 6,
   },

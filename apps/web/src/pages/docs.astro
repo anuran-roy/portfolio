@@ -1,0 +1,104 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro"
+---
+
+<BaseLayout
+  title="Docs"
+  description="Public API documentation for anuran.dev — authentication, endpoints, examples, and error format for Anuran Roy's site."
+  width="narrow"
+>
+  <header class="mb-8">
+    <h1 class="font-heading text-3xl font-bold tracking-tight">Docs</h1>
+    <p class="mt-2 text-muted-foreground">
+      Public API and integration docs for anuran.dev by Anuran Roy.
+    </p>
+  </header>
+
+  <article
+    class="prose prose-neutral max-w-none dark:prose-invert prose-headings:font-heading prose-a:text-foreground"
+  >
+    <p>
+      <strong>anuran.dev</strong> is a personal site by <strong>Anuran Roy</strong>.
+      Its API is intentionally tiny, public, and read-only. Base URL:
+      <code>https://anuran.dev</code>. Spec: <a href="/openapi.json">/openapi.json</a>
+      (OpenAPI 3.1). Catalog: <a href="/.well-known/api-catalog">/.well-known/api-catalog</a>.
+      Portal: <a href="/developers">/developers</a>.
+    </p>
+
+    <h2>Authentication</h2>
+    <p>
+      No authentication. No API keys, no OAuth, no login. All endpoints are
+      <code>GET</code> and public. Send no secrets. Rate limiting is CDN
+      fair-use only.
+    </p>
+
+    <h2>Endpoints</h2>
+    <h3><code>GET /api/v1/health</code></h3>
+    <p>OperationId: <code>getHealth</code>. Liveness check.</p>
+    <pre><code>curl -s https://anuran.dev/api/v1/health
+# &#123;"status":"ok","site":"https://anuran.dev","version":"1.0.0"&#125;</code></pre>
+
+    <h3><code>GET /api/v1/posts</code></h3>
+    <p>
+      OperationId: <code>listPosts</code>. List published blog posts by Anuran Roy,
+      newest first. Query: <code>limit</code> (1–50, default 10),
+      <code>tag</code> (optional filter).
+    </p>
+    <pre><code>curl -s "https://anuran.dev/api/v1/posts?limit=3"
+curl -s "https://anuran.dev/api/v1/posts?tag=python&amp;limit=5"</code></pre>
+
+    <h3><code>GET /api/v1/projects</code></h3>
+    <p>OperationId: <code>listProjects</code>. List open-source projects.</p>
+    <pre><code>curl -s https://anuran.dev/api/v1/projects</code></pre>
+
+    <h3><code>GET /api/v1/papers</code></h3>
+    <p>OperationId: <code>listPapers</code>. List research papers.</p>
+    <pre><code>curl -s https://anuran.dev/api/v1/papers</code></pre>
+
+    <h3><code>GET /api/v1/meta</code></h3>
+    <p>OperationId: <code>getMeta</code>. Site identity, links, and resource index.</p>
+    <pre><code>curl -s https://anuran.dev/api/v1/meta</code></pre>
+
+    <h2>Example requests</h2>
+    <pre><code># JavaScript (fetch)
+const res = await fetch("https://anuran.dev/api/v1/posts?limit=5");
+const &#123; data &#125; = await res.json();
+
+# Python (urllib, no deps)
+import json, urllib.request
+with urllib.request.urlopen("https://anuran.dev/api/v1/projects") as r:
+    print(json.load(r)["data"][0]["title"])</code></pre>
+
+    <h2>Errors (JSON, not HTML)</h2>
+    <p>
+      All <code>/api/*</code> errors return
+      <code>application/problem+json</code> with <code>code</code>,
+      <code>message</code>, <code>hint</code>, and <code>status</code>.
+      Unknown <code>/api/*</code> paths return <code>404</code> JSON, never HTML.
+    </p>
+    <pre><code>&#123;
+  "type": "about:blank",
+  "title": "Invalid limit",
+  "status": 400,
+  "code": "invalid_limit",
+  "message": "limit must be an integer between 1 and 50.",
+  "hint": "Try /api/v1/posts?limit=5. See /docs and /openapi.json."
+&#125;</code></pre>
+
+    <h2>Markdown, sitemap, and llms.txt</h2>
+    <ul>
+      <li>Markdown: <code>Accept: text/markdown</code> returns <code>text/markdown</code> with <code>Vary: Accept</code>.</li>
+      <li>Sitemap: <a href="/sitemap-index.xml">/sitemap-index.xml</a></li>
+      <li>Site guide: <a href="/llms.txt">/llms.txt</a> (includes when-to-use for agents)</li>
+      <li>RSS: <a href="/rss.xml">/rss.xml</a></li>
+    </ul>
+
+    <h2>CLI</h2>
+    <p>
+      Prefer a CLI? <code>npx -y anuran-dev posts --limit 5</code>. Install:
+      <code>npm install -g anuran-dev</code>. Details in
+      <a href="/developers">/developers</a> and on
+      <a href="https://www.npmjs.com/package/anuran-dev">npm</a>.
+    </p>
+  </article>
+</BaseLayout>
